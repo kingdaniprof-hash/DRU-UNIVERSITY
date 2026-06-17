@@ -1,0 +1,230 @@
+:root {
+    --primary-navy: #1d3557;
+    --accent-blue: #457b9d;
+    --bg-light-gray: #f1faee;
+    --card-bg: #ffffff;
+    --text-main: #2b2d42;
+    --text-muted: #6c757d;
+    --success-green: #2a9d8f;
+    --border-radius: 16px;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    color: var(--text-main);
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Header & Navigation Styling */
+.app-header {
+    background-color: var(--card-bg);
+    padding: 20px 16px 10px 16px;
+    border-bottom: 1px solid #e9ecef;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+}
+
+.header-title-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.academic-icon {
+    font-size: 24px;
+}
+
+.app-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--primary-navy);
+    margin: 0;
+}
+
+.tab-navigation {
+    display: flex;
+    gap: 10px;
+    background: #eef2f7;
+    padding: 6px;
+    border-radius: 12px;
+}
+
+.nav-btn {
+    flex: 1;
+    background: transparent;
+    color: var(--accent-blue);
+    border: none;
+    padding: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nav-btn.active {
+    background: var(--primary-navy);
+    color: white;
+    box-shadow: 0 4px 10px rgba(29, 53, 87, 0.2);
+}
+
+/* Container Structure */
+.app-container {
+    padding: 20px 16px;
+}
+
+.portal-card {
+    background: var(--card-bg);
+    padding: 24px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+    border: 1px solid #f1f3f5;
+}
+
+.card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--primary-navy);
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+.card-description {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 24px;
+}
+
+/* Button UI Components */
+.primary-btn {
+    width: 100%;
+    background-color: var(--primary-navy);
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(29, 53, 87, 0.15);
+    transition: background-color 0.2s;
+}
+
+.primary-btn:active {
+    background-color: #112237;
+}
+
+.btn-attendance {
+    background-color: var(--primary-navy);
+}
+
+.secondary-btn {
+    background: transparent;
+    border: 2px solid var(--accent-blue);
+    color: var(--accent-blue);
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+/* Quiz Options UI */
+.quiz-info-badge {
+    display: inline-block;
+    background: var(--bg-light-gray);
+    color: var(--accent-blue);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.quiz-question {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 20px;
+}
+
+.options-list button {
+    display: block;
+    width: 100%;
+    margin-bottom: 12px;
+    padding: 16px;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    text-align: left;
+    font-size: 15px;
+    color: var(--text-main);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.options-list button:active, .options-list button.selected {
+    background: #edf2f7;
+    border-color: var(--accent-blue);
+}
+
+/* Widgets & Utilities */
+.calendar-widget {
+    margin-top: 30px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.calendar-header {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-main);
+    margin-bottom: 10px;
+}
+
+.calendar-mock {
+    background: #f8f9fa;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+.status-msg {
+    color: var(--success-green);
+    font-weight: 600;
+    font-size: 14px;
+    margin-top: 15px;
+}
+
+.score-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 8px solid var(--bg-light-gray);
+    border-top-color: var(--success-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px auto;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--success-green);
+}
+
+.hidden { display: none !important; }
+.text-center { text-align: center; }
+
+/* Micro-Animations */
+.animate-fade {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}

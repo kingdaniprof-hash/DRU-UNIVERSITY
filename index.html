@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DRU — NextGen Enterprise Academic Matrix</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-space: #030712;
+            --neon-blue: #00f2fe;
+            --neon-purple: #4facfe;
+            --neon-amber: #f59e0b;
+            --neon-emerald: #10b981;
+            --glass-bg: rgba(15, 23, 42, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-glow: 0 0 10px rgba(0, 242, 254, 0.4);
+            --card-radius: 16px;
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--bg-space);
+            color: #f1f5f9;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .cosmic-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 80% 20%, rgba(79, 172, 254, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 20% 80%, rgba(0, 242, 254, 0.1) 0%, transparent 50%);
+        }
+
+        .hidden { display: none !important; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--neon-blue); }
+
+        /* ==========================================
+           1. MODERN GLASSMORPHISM GATEWAY (LOGIN)
+           ========================================== */
+        .gateway-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--card-radius);
+            padding: 35px;
+            width: 100%;
+            max-width: 460px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .brand-icon-glow {
+            font-size: 40px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 8px rgba(0,242,254,0.5));
+            margin-bottom: 15px;
+        }
+
+        .glass-card h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            letter-spacing: 2px;
+            margin: 0 0 5px 0;
+            color: #ffffff;
+        }
+
+        .glass-card p {
+            color: #94a3b8;
+            font-size: 13px;
+            margin: 0 0 25px 0;
+        }
+
+        .input-group-cyber {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group-cyber label {
+            display: block;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--neon-blue);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .cyber-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+            transition: var(--transition-smooth);
+            box-sizing: border-box;
+        }
+
+        .cyber-input:focus {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+            background: rgba(0,0,0,0.6);
+        }
+
+        .btn-cyber {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
+            border: none;
+            border-radius: 10px;
+            color: #030712;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition-smooth);
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
+        }
+
+        .btn-cyber:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 242, 254, 0.5);
+            filter: brightness(1.1);
+        }
+
+        .btn-cyber.admin-btn {
+            background: linear-gradient(135deg, var(--neon-amber), #ea580c);
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+            color: #fff;
+        }
+        .btn-cyber.admin-btn:hover { box-shadow: 0 8px 25px rgba(245, 158, 11, 0.5); }
+
+        .btn-cyber.super-btn {
+            background: linear-gradient(135deg, var(--neon-emerald), #047857);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            color: #fff;
+        }
+        .btn-cyber.super-btn:hover { box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5); }
+
+        .form-toggle-link {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 15px;
+            display: inline-block;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .form-toggle-link span { color: var(--neon-blue); font-weight: 600; }
+        .form-toggle-link:hover { color: #ffffff; }
+
+        .receipt-container {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        /* ==========================================
+           2. FLEXIBLE CYBER DASHBOARD FRAMEWORK
+           ========================================== */
+        .cyber-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Engine */
+        .cyber-sidebar {
+            background: rgba(6, 11, 25, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: var(--transition-smooth);
+            z-index: 1000;
+        }
+
+        .sidebar-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: linear-gradient(to right, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .cyber-menu { list-style: none; padding: 0; margin: 0; }
+        
+        .cyber-menu-item {
+            padding: 14px 18px;
+            border-radius: 12px;
+            color: #94a3b8;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: var(--transition-smooth);
+        }
+
+        .cyber-menu-item i { font-size: 16px; width: 20px; }
+
+        .cyber-menu-item:hover, .cyber-menu-item.active {
+            background: rgba(255,255,255,0.03);
+            color: #ffffff;
+            border-left: 4px solid var(--neon-blue);
+            padding-left: 14px;
+        }
+
+        .cyber-menu-item.active {
+            background: linear-gradient(90deg, rgba(0, 242, 254, 0.1), transparent);
+            text-shadow: var(--text-glow);
+        }
+
+        /* Workspace Panels */
+        .workspace-space {
+            padding: 40px;
+            max-height: 100vh;
+            overflow-y: auto;
+            box-sizing: border-box;
+            transition: var(--transition-smooth);
+        }
+
+        .header-glass-bar {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            padding: 18px 30px;
+            border-radius: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+            gap: 15px;
+        }
+
+        .mobile-toggle-btn {
+            display: none;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: #ffffff;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .mobile-toggle-btn:hover {
+            background: rgba(0, 242, 254, 0.1);
+            color: var(--neon-blue);
+        }
+
+        .live-clock-badge {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-blue);
+            font-size: 14px;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        .view-panel-cyber {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--card-radius);
+            padding: 35px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+
+        .view-panel-cyber h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            margin-top: 0;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        /* Cards Layout grid */
+        .neon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+
+        .neon-card-stat {
+            background: rgba(255,255,255,0.01);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .neon-card-stat::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(to right, var(--neon-purple), var(--neon-blue));
+        }
+
+        .neon-card-stat h4 { margin: 0; font-size: 12px; text-transform: uppercase; color: #64748b; letter-spacing: 1px; }
+        .neon-card-stat p { margin: 12px 0 0 0; font-size: 20px; font-weight: 700; }
+
+        /* Timetable Grid Design Overhaul */
+        .cyber-table {
+            width: 100%; border-collapse: collapse; margin-top: 15px; text-align: left;
+        }
+        .cyber-table th {
+            background: rgba(0,0,0,0.4); padding: 16px; font-size: 12px;
+            text-transform: uppercase; color: var(--neon-blue); letter-spacing: 1px;
+            border-bottom: 2px solid var(--glass-border);
+        }
+        .cyber-table td { padding: 18px 16px; border-bottom: 1px solid var(--glass-border); font-size: 14px; }
+        .cyber-table tr:hover { background: rgba(255,255,255,0.01); }
+        
+        .class-bubble {
+            background: rgba(0, 242, 254, 0.06);
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            padding: 8px 12px; border-radius: 8px; font-size: 13px;
+        }
+
+        /* Real Notes Structured Layout CSS */
+        .notes-grid-layout {
+            display: grid; grid-template-columns: 1fr; gap: 30px;
+        }
+        .note-block-card {
+            background: rgba(15, 23, 42, 0.4); border: 1px solid var(--glass-border);
+            border-radius: 12px; padding: 25px;
+        }
+        .note-block-card h3 {
+            font-family: 'Orbitron', sans-serif; color: var(--neon-blue); font-size: 16px; margin: 0 0 15px 0;
+        }
+        .note-content-box {
+            font-size: 13.5px; color: #cbd5e1; line-height: 1.7; background: rgba(0,0,0,0.3);
+            padding: 15px; border-radius: 8px; border-left: 3px solid var(--neon-purple);
+        }
+        
+        /* Premium Quiz Mechanics */
+        .quiz-feedback-box {
+            padding: 16px; border-radius: 10px; margin-bottom: 15px; font-weight: 500; font-size: 14px;
+        }
+        .quiz-feedback-box.correct { background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #10b981; }
+        .quiz-feedback-box.wrong { background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #ef4444; }
+
+        .progress-track-bar {
+            width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-bottom: 25px; overflow: hidden;
+        }
+        .progress-track-fill {
+            height: 100%; width: 0%; background: linear-gradient(to right, var(--neon-purple), var(--neon-blue)); transition: width 0.3s ease;
+        }
+        
+        .option-cyber-box {
+            display: flex; align-items: center; gap: 14px; background: rgba(0,0,0,0.2);
+            padding: 15px; border: 1px solid var(--glass-border); border-radius: 10px; cursor: pointer;
+            margin-bottom: 12px; transition: var(--transition-smooth);
+        }
+        .option-cyber-box:hover { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.02); }
+        .radio-cyber:checked + .option-cyber-box { border-color: var(--neon-blue); background: rgba(0, 242, 254, 0.05); }
+
+        .quiz-domain-tag {
+            display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 11px;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;
+            background: rgba(79, 172, 254, 0.15); color: var(--neon-purple); border: 1px solid rgba(79, 172, 254, 0.3);
+        }
+
+        /* Historical Results Widget */
+        .results-log-stack {
+            margin-top: 20px; display: flex; flex-direction: column; gap: 15px;
+        }
+        .result-log-item {
+            background: rgba(255,255,255,0.02); padding: 20px; border: 1px solid var(--glass-border); border-radius: 10px;
+            font-size: 13px;
+        }
+
+        /* Display Board Specific Layout Rules */
+        .display-board-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 12px;
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .display-board-col h5 {
+            margin: 0 0 8px 0; color: var(--neon-blue); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .display-board-row {
+            display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+        .display-board-row:last-child { border-bottom: none; }
+        .grade-badge-neon {
+            font-family: 'Orbitron', sans-serif; font-weight: 700; padding: 2px 6px; border-radius: 4px; font-size: 11px;
+        }
+
+        /* BACKDROP OVERLAY FOR CLOSING MENU ON MOBILE CLICK */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+        }
+
+        /* ==========================================
+           3. ADVANCED MEDIA QUERY MATRIX FOR MOBILE
+           ========================================== */
+        @media (max-width: 992px) {
+            .cyber-layout { grid-template-columns: 1fr; }
+            .cyber-sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100vh; box-sizing: border-box; }
+            .cyber-sidebar.menu-open { left: 0; box-shadow: 20px 0 50px rgba(0,0,0,0.8); }
+            .workspace-space { padding: 20px; }
+            .mobile-toggle-btn { display: block; }
+            .sidebar-overlay.active { display: block; }
+            .display-board-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cosmic-bg"></div>
+    <div class="sidebar-overlay" id="menu-overlay" onclick="toggleMobileMenu()"></div>
+
+    <div class="gateway-wrapper" id="layer-gateway">
+        <div class="glass-card">
+            <div class="brand-icon-glow"><i class="fa-solid fa-graduation-cap"></i></div>
+            <h1 id="gateway-title">DRU PORTAL HUD</h1>
+            <p id="gateway-subtitle">Secure Academic Infrastructure Access</p>
+
+            <div id="panel-login">
+                <div class="input-group-cyber">
+                    <label>Identification / Index No</label>
+                    <input type="text" id="login-index" class="cyber-input" placeholder="e.g. DRU/SIT/2026/101" value="DRU/SIT/2026/101">
+                </div>
+                <div class="input-group-cyber">
+                    <label>Portal Secret Password</label>
+                    <input type="password" id="login-pass" class="cyber-input" placeholder="••••••••" value="admin123">
+                </div>
+                <button class="btn-cyber" onclick="executeAuthentication()">Establish Connection</button>
+                <div class="form-toggle-link" onclick="toggleGatewayView('signup')">New student entry? <span>Register Details</span></div><br>
+                <div class="form-toggle-link" style="color:var(--neon-amber)" onclick="toggleGatewayView('admin-gate')"><i class="fa-solid fa-screwdriver-wrench"></i> Administrative Desk Node</div><br>
+                <div class="form-toggle-link" style="color:var(--neon-emerald); font-weight:700;" onclick="toggleGatewayView('super-auth-gate')"><i class="fa-solid fa-key"></i> Super Admin Root Control Panel</div>
+            </div>
+
+            <div id="panel-signup" class="hidden">
+                <p style="color:#e2e8f0; font-size:12px; margin-top:-15px; margin-bottom:20px; text-align:left; background:rgba(255,255,255,0.05); padding:10px; border-radius:6px; border-left:3px solid var(--neon-blue);">
+                    <i class="fa-solid fa-circle-info"></i> Submit details to create your record profile. You will get a temporary token to complete physical entry payment verification.
+                </p>
+                <div class="input-group-cyber"><label>Full Legal Name</label><input type="text" id="reg-name" class="cyber-input" placeholder="e.g. Samuel Amissah"></div>
+                <div class="input-group-cyber"><label>Active Email Node</label><input type="email" id="reg-email" class="cyber-input" placeholder="name@example.com"></div>
+                <div class="input-group-cyber"><label>Mobile Contact Line</label><input type="text" id="reg-phone" class="cyber-input" placeholder="e.g. +233 24 000 0000"></div>
+                <button class="btn-cyber" onclick="executeRegistration()">Compile Registration Metadata</button>
+                <div class="form-toggle-link" onclick="toggleGatewayView('login')">Back to <span>System Login</span></div>
+            </div>
+
+            <div id="panel-receipt" class="hidden">
+                <div class="receipt-container">
+                    <h4 style="margin:0 0 10px 0; color:var(--neon-amber); text-transform:uppercase; font-family:'Orbitron'; font-size:12px;"><i class="fa-solid fa-receipt"></i> Temporary Registration Receipt</h4>
+                    <p style="font-size:13px; margin:5px 0;"><strong>Name:</strong> <span id="rec-name">---</span></p>
+                    <p style="font-size:13px; margin:5px 0;"><strong>Temporary Code:</strong> <span id="rec-token" style="color:var(--neon-blue); font-family:monospace; font-weight:700;">---</span></p>
+                    <p style="font-size:11px; color:#94a3b8; line-height:1.4; margin:15px 0 0 0;">
+                        ⚠️ <strong>Action Required:</strong> Present this code at the physical cash office. Once payment is settled, the staff administrator will generate your live Index Number and Password.
+                    </p>
+                </div>
+                <button class="btn-cyber" onclick="toggleGatewayView('login')">Return to System Login</button>
+            </div>
+
+            <div id="panel-admin-gate" class="hidden">
+                <p style="color:#f59e0b; font-size:12px; margin-top:-15px; margin-bottom:20px; text-align:left; background:rgba(245,158,11,0.05); padding:10px; border-radius:6px; border-left:3px solid var(--neon-amber);">
+                    <i class="fa-solid fa-shield"></i> <strong>Staff Identity Verification:</strong> Enter your secret desk key parameter to unlock terminal operational functions.
+                </p>
+                <div class="input-group-cyber">
+                    <label>Administrative Login Password</label>
+                    <input type="password" id="gate-admin-password" class="cyber-input" placeholder="••••••••">
+                </div>
+                <button class="btn-cyber admin-btn" onclick="verifyAdminGatewayAccess()">Unlock Terminal Node</button>
+                <div class="form-toggle-link" onclick="toggleGatewayView('login')">Cancel and return to <span>Student Login</span></div>
+            </div>
+
+            <div id="panel-admin" class="hidden">
+                <p style="color:#f59e0b; font-size:12px; margin-top:-15px; margin-bottom:20px; text-align:left; background:rgba(245,158,11,0.05); padding:10px; border-radius:6px; border-left:3px solid var(--neon-amber);">
+                    <i class="fa-solid fa-lock"></i> <strong>Staff Admin Hub:</strong> Input the infrastructure code configured by the Super Admin to process paid students.
+                </p>
+                <div class="input-group-cyber"><label>Admin Infrastructure Key</label><input type="password" id="admin-pass" class="cyber-input" placeholder="Enter active admin key"></div>
+                <div class="input-group-cyber"><label>Student Temporary Code</label><input type="text" id="admin-student-token" class="cyber-input" placeholder="e.g. TEMP-XXXX"></div>
+                <hr style="border:0; border-top:1px solid var(--glass-border); margin:20px 0;">
+                <div class="input-group-cyber"><label>Generate Student Index No</label><input type="text" id="admin-gen-index" class="cyber-input" placeholder="e.g. DRU/SIT/2026/102"></div>
+                <div class="input-group-cyber"><label>Generate Student Password</label><input type="text" id="admin-gen-pass" class="cyber-input" placeholder="Define portal password"></div>
+                
+                <button class="btn-cyber admin-btn" onclick="executeAdminGeneration()">Authorize & Generate Credentials</button>
+                <div class="form-toggle-link" onclick="toggleGatewayView('login')">Cancel and return to <span>Student Login</span></div>
+            </div>
+
+            <div id="panel-super-auth-gate" class="hidden">
+                <p style="color:var(--neon-blue); font-size:12px; margin-top:-15px; margin-bottom:20px; text-align:left; background:rgba(0, 242, 254, 0.05); padding:10px; border-radius:6px; border-left:3px solid var(--neon-blue);">
+                    <i class="fa-solid fa-user-shield"></i> <strong>Security Challenge:</strong> Type your private security access password sequence below to open the root gateway fields.
+                </p>
+                <div class="input-group-cyber">
+                    <label>Root Panel Unlock Password</label>
+                    <input type="password" id="super-gate-unlock-pass" class="cyber-input" placeholder="••••••••">
+                </div>
+                <button class="btn-cyber" onclick="challengeSuperAdminGatePassword()">Initialize Interface Node</button>
+                <div class="form-toggle-link" onclick="toggleGatewayView('login')">Cancel and return to <span>Student Login</span></div>
+            </div>
+
+            <div id="panel-super-gate" class="hidden">
+                <p style="color:#10b981; font-size:12px; margin-top:-15px; margin-bottom:20px; text-align:left; background:rgba(16,185,129,0.05); padding:10px; border-radius:6px; border-left:3px solid var(--neon-emerald);">
+                    <i class="fa-solid fa-crown"></i> <strong>Root Gate Verification:</strong> Provide credentials to authorize root terminal link initialization.
+                </p>
+                <div class="input-group-cyber"><label>Super User ID</label><input type="text" id="gate-super-id" class="cyber-input" placeholder="Enter Super Admin ID" value="Dynicious King"></div>
+                <div class="input-group-cyber"><label>Super Security Pass</label><input type="password" id="gate-super-pass" class="cyber-input" placeholder="••••••••" value="5020"></div>
+                <button class="btn-cyber super-btn" onclick="verifySuperGatewayAccess()">Authorize Matrix Root Link</button>
+                <div class="form-toggle-link" onclick="toggleGatewayView('login')">Cancel and return to <span>Student Login</span></div>
+            </div>
+
+            <div id="panel-super" class="hidden">
+                <p style="color:#10b981; font-size:12px; margin-top:-15px; margin-bottom:20px; text-align:left; background:rgba(16,185,129,0.05); padding:10px; border-radius:6px; border-left:3px solid var(--neon-emerald);">
+                    <i class="fa-solid fa-crown"></i> <strong>Super Admin Console:</strong> Master control panel to view, generate, or mutate active Administrative keys.
+                </p>
+                
+                <div id="super-control-elements" style="text-align:left; background:rgba(0,0,0,0.3); padding:15px; border-radius:8px; border:1px solid rgba(16,185,129,0.2);">
+                    <div class="input-group-cyber">
+                        <label style="color:var(--neon-emerald);">Active Admin Infrastructure Key</label>
+                        <input type="text" id="super-current-key" class="cyber-input" style="font-family:monospace; color:var(--neon-amber);">
+                    </div>
+                    <button class="btn-cyber super-btn" style="padding:10px; font-size:12px; margin-bottom:10px;" onclick="generateRandomAdminKey()">Generate New Key Variant</button>
+                    <button class="btn-cyber" style="padding:10px; font-size:12px; margin-bottom:15px;" onclick="saveMutatedAdminKey()">Commit Key Overwrite</button>
+                    
+                    <hr style="border:0; border-top:1px solid var(--glass-border); margin:15px 0;">
+                    <label style="display:block; font-size:11px; text-transform:uppercase; color:var(--neon-blue); font-weight:600; margin-bottom:8px;">Exam Secure Access Token Pool Generator</label>
+                    <button class="btn-cyber admin-btn" style="padding:10px; font-size:12px; margin-bottom:10px;" onclick="compileNewExamSecureToken()">Compile New Code (Paid Student Access)</button>
+                    <div id="super-compiled-code-log" style="font-size:14px; font-family:'Orbitron'; color:var(--neon-emerald); text-align:center; font-weight:700; min-height:24px;"></div>
+                </div>
+
+                <div class="form-toggle-link" onclick="location.reload()">Exit control console and <span>Reset</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="cyber-layout hidden" id="layer-dashboard">
+        <div class="cyber-sidebar" id="main-sidebar">
+            <div>
+                <div class="sidebar-logo"><i class="fa-solid fa-shield-halved" style="color: var(--neon-blue);"></i> DRU HUD</div>
+                <ul class="cyber-menu">
+                    <li class="cyber-menu-item active" id="nav-home" onclick="routeWorkspaceView('home')"><i class="fa-solid fa-chart-pie"></i>Overview</li>
+                    <li class="cyber-menu-item" id="nav-courses" onclick="routeWorkspaceView('courses')"><i class="fa-solid fa-folder-open"></i>Curriculum Notes</li>
+                    <li class="cyber-menu-item" id="nav-timetable" onclick="routeWorkspaceView('timetable')"><i class="fa-solid fa-calendar-days"></i>Class Schedule</li>
+                    <li class="cyber-menu-item" id="nav-quiz" onclick="routeWorkspaceView('quiz')"><i class="fa-solid fa-brain"></i>Online Exams</li>
+                </ul>
+            </div>
+            <div class="cyber-menu-item" style="color:#ef4444;" onclick="shutdownSession()"><i class="fa-solid fa-power-off"></i>Disconnect</div>
+        </div>
+
+        <div class="workspace-space">
+            <div class="header-glass-bar">
+                <button class="mobile-toggle-btn" onclick="toggleMobileMenu()"><i class="fa-solid fa-bars"></i></button>
+                <div style="flex-grow: 1;"><span id="live-greeting" style="color:#94a3b8; font-weight:500;">System online,</span> <strong id="bar-user-name" style="color:#fff;">---</strong></div>
+                <div class="live-clock-badge" id="live-clock">00:00:00 UTC</div>
+            </div>
+
+            <div id="view-home" class="view-panel-cyber">
+                <h2>Operational Tracking Parameters</h2>
+                <div class="neon-grid">
+                    <div class="neon-card-stat"><h4>Structural Specialization</h4><p id="card-track-title">Information Technology</p></div>
+                    <div class="neon-card-stat"><h4>Exam Wallet Clearance</h4><p id="card-wallet-status" style="color:#ef4444;">Pending Payment</p></div>
+                    <div class="neon-card-stat"><h4>System Access Token</h4><p id="card-index-display" style="font-family:'Orbitron'; font-size:15px; color:var(--neon-blue);">DRU/SIT/2026/000</p></div>
+                </div>
+                
+                <h3 style="font-family:'Orbitron'; font-size:14px; text-transform:uppercase; color:var(--neon-blue); margin: 30px 0 15px 0;"><i class="fa-solid fa-square-poll-vertical"></i> Transmitted Online Exam Results Dashboard</h3>
+                <div class="view-panel-cyber" style="background:rgba(0,0,0,0.2); padding: 20px;">
+                    <div id="results-empty-notice" style="font-size:13px; color:#64748b; text-align:center; padding:10px;">No historical exam sequences compiled yet. Settle evaluation balances to initialize testing nodes.</div>
+                    <div id="results-stack-container" class="results-log-stack"></div>
+                </div>
+            </div>
+
+            <div id="view-courses" class="view-panel-cyber hidden">
+                <h2>Real Curriculum Core Notes</h2>
+                <p style="color:#94a3b8; font-size:13px; margin-bottom:25px;">Review authoritative course notes modules directly pulled from current infrastructure tracks.</p>
+                
+                <div class="notes-grid-layout">
+                    <div class="note-block-card">
+                        <h3>📚 Advanced Systems Networking (OSPF Metrics)</h3>
+                        <div class="note-content-box">
+                            <strong>Open Shortest Path First (OSPF)</strong> is a Link-State interior gateway routing protocol operating via Dijkstra's Shortest Path First (SPF) algorithm. Area divisions reduce overhead boundaries; <code>Area 0</code> acts as the critical Backbone Layer. OSPF exchanges Routing updates using multicast targets <code>224.0.0.5</code> (All OSPF Routers) and <code>224.0.0.6</code> (Designated Routers).
+                        </div>
+                    </div>
+                    
+                    <div class="note-block-card">
+                        <h3>📚 Relational Database Systems (Third Normal Form Verification)</h3>
+                        <div class="note-content-box">
+                            A relation is declared compliant in <strong>Third Normal Form (3NF)</strong> if and only if it satisfies 2NF (removal of partial key dependencies) and holds <strong>zero transitive structural functional dependencies</strong>. Informally, every non-prime attribute value must depend solely on the prime candidate key element. "All fields must depend on the key, the whole key, and nothing but the key." This architecture scales Oracle processing nodes and optimizes storage allocation bounds.
+                        </div>
+                    </div>
+
+                    <div class="note-block-card">
+                        <h3>📚 Web Application Compilation (Persistent Server Architecture)</h3>
+                        <div class="note-content-box">
+                            Hypertext Preprocessor (PHP) runs state verification layers using superglobal arrays. <code>$_POST</code> gathers form metadata fields securely over HTTP payloads without mutating URL structures. Sessions are triggered via <code>session_start()</code>, which maps a randomized cookie token identifier inside the client browser environment back to server storage memory blocks, keeping state variables intact across system pages.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-timetable" class="view-panel-cyber hidden">
+                <h2>Rotational Lecture Schedule Grid</h2>
+                <div style="overflow-x: auto;">
+                    <table class="cyber-table">
+                        <thead>
+                            <tr><th>Day Node</th><th>08:00 - 10:30</th><th>11:00 - 13:30</th><th>14:00 - 16:30</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Monday</td><td><div class="class-bubble">DRU-301: Advanced Network Architecture</div></td><td>-- System Idle --</td><td><div class="class-bubble" style="border-color:var(--neon-purple);">DRU-305: Database Optimization</div></td></tr>
+                            <tr><td>Tuesday</td><td>-- System Idle --</td><td><div class="class-bubble">DRU-309: Web App Compilation</div></td><td><div class="class-bubble">DRU-311: Applied Cyber Systems</div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="view-quiz" class="view-panel-cyber hidden">
+                <h2>Electronic Assessment Framework</h2>
+                
+                <div id="quiz-block-payment-gate" style="text-align: center; padding: 40px 20px;">
+                    <div style="font-size: 54px; color: var(--neon-purple); margin-bottom: 20px;"><i class="fa-solid fa-credit-card"></i></div>
+                    <h3 style="font-family:'Orbitron'; letter-spacing: 1px;">Online Examination Portal Access Locked</h3>
+                    <p style="color:#94a3b8; font-size: 14px; max-width: 500px; margin: 10px auto 30px auto; line-height:1.6;">
+                        In accordance with technical administrative system requirements, accessing the 20-Question Comprehensive IT Certification Exam requires an online token access settlement fee of <strong>300 GHS (Ghana Cedis)</strong>.
+                    </p>
+                    <button class="btn-cyber" style="width:auto; padding:15px 40px;" onclick="processExamFeePayment()">Authorize 300 GHS Payment</button>
+                </div>
+
+                <div id="quiz-block-code-gate" class="hidden" style="text-align: center; padding: 40px 20px;">
+                    <div style="font-size: 54px; color: var(--neon-amber); margin-bottom: 20px;"><i class="fa-solid fa-lock-open"></i></div>
+                    <h3 style="font-family:'Orbitron'; letter-spacing: 1px;">System Access Authentication Token Key Required</h3>
+                    <p style="color:#94a3b8; font-size: 14px; max-width: 500px; margin: 10px auto 25px auto; line-height:1.6;">
+                        Your payment verification has been cleared! To initialize your connection grid link, enter the **6-digit alphanumeric access code** provided by the Super Administrator.
+                    </p>
+                    <div class="input-group-cyber" style="max-width: 320px; margin: 0 auto 20px auto;">
+                        <label style="text-align: center; display: block;">Enter Alphanumeric Exam Code</label>
+                        <input type="text" id="student-exam-access-code-input" class="cyber-input" style="text-align: center; font-family:'Orbitron'; font-size: 18px; letter-spacing: 2px;" placeholder="DRU-XXXXXX">
+                    </div>
+                    <button class="btn-cyber" style="width:auto; padding:12px 35px;" onclick="validateExamAccessCode()">Verify Access Token</button>
+                </div>
+
+                <div id="quiz-block-intro" class="hidden">
+                    <p style="color:#94a3b8; font-size:14px; line-height: 1.6;">Welcome to the comprehensive IT Evaluation Node. This system will dynamically measure your competencies across <strong>20 specialized engineering questions</strong>.</p>
+                    <button class="btn-cyber" style="width:auto; padding:12px 25px;" onclick="initializeActiveQuiz()">Initialize 20-Question Matrix</button>
+                </div>
+
+                <div id="quiz-block-player" class="hidden">
+                    <div class="progress-track-bar"><div class="progress-track-fill" id="quiz-bar"></div></div>
+                    <div id="quiz-domain-indicator" class="quiz-domain-tag">Networking</div>
+                    <div id="quiz-feedback-box" class="quiz-feedback-box hidden"></div>
+                    <div id="quiz-dynamic-field"></div>
+                    <div style="display:flex; justify-content:space-between; margin-top:25px; align-items:center; gap: 10px;">
+                        <span id="quiz-tracker-txt" style="font-size:12px; color:#64748b;">Question 1 of 20</span>
+                        <button class="btn-cyber" id="quiz-action-btn" style="width:auto; padding:10px 22px;" onclick="submitAnswerEvaluation()">Evaluate Choice Response</button>
+                    </div>
+                </div>
+
+                <div id="quiz-block-results" class="hidden" style="text-align:center; padding:20px;">
+                    <h3 style="color:var(--neon-blue); font-family:'Orbitron';">Sequence Concluded</h3>
+                    <h1 id="quiz-score-display" style="font-size:48px; margin:5px 0; font-family:'Orbitron'; text-shadow:var(--text-glow);">0 / 20</h1>
+                    <p id="quiz-performance-profile" style="color:#94a3b8; font-size:14px; margin-bottom:25px;"></p>
+                    <button class="btn-cyber" style="width:auto; padding:10px 20px;" onclick="resetQuizTrack()">Reset Assessment Instance</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // CORE PASSWORDS HARDCODED
+        const STAFF_GATEWAY_PASSWORD = "5020"; 
+        const SUPER_GATEWAY_PASSWORD = "5020"; 
+
+        // MASTER ADMIN RUNTIME STORAGE CONFIG
+        let activeAdminKey = localStorage.getItem("dru_admin_key") || "dru_root_2026";
+
+        // VERIFIED STUDENT ACCOUNTS DATABASE MAPPING
+        let localStudentsDb = JSON.parse(localStorage.getItem("university_mock_db")) || {
+            "DRU/SIT/2026/101": { indexNo: "DRU/SIT/2026/101", name: "Dynicious King", email: "dyn@gmail.com", pass: "admin123", paidExams: false, results: [] }
+        };
+
+        // EXAM SECURE SYSTEM ACCESS KEYS POOL STORED STORAGE
+        let secureExamTokensPool = JSON.parse(localStorage.getItem("dru_secure_exam_tokens")) || ["DRU-992140", "DRU-554109"];
+
+        // PENDING COMPILATION LOG STACK
+        let pendingRegistrationsDb = JSON.parse(localStorage.getItem("university_pending_db")) || {};
+        let sessionUser = null;
+        let validatedExamCodeReference = ""; 
+
+        // 20-QUESTION EVALUATION REPOSITORY MATRIX
+        const quizRepo = [
+            { dom: "Networking Architecture", q: "Which core routing protocol utilizes the Dijkstra Shortest Path First (SPF) algorithm to map structural convergence updates?", options: ["Routing Information Protocol (RIP)", "Open Shortest Path First (OSPF)", "Border Gateway Protocol (BGP)", "Simple Network Management Protocol (SNMP)"], ans: 1 },
+            { dom: "Networking Architecture", q: "Which protocol maps local hardware MAC layer addresses directly to dynamic network layer IP parameters?", options: ["Domain Name System (DNS)", "Address Resolution Protocol (ARP)", "Dynamic Host Configuration Protocol (DHCP)", "User Datagram Protocol (UDP)"], ans: 1 },
+            { dom: "Networking Architecture", q: "What is the primary function of a Subnet Mask inside IPv4 configuration layers?", options: ["To define unique device MAC identities securely", "To distinguish network portion bits from host portion variables", "To route packets automatically through WAN switches", "To encrypt out-going frame telemetry sequences"], ans: 1 },
+            { dom: "Networking Architecture", q: "At which layer of the OSI model does an unmanaged hardware repeater switch register its operations?", options: ["Layer 1 — Physical Layer", "Layer 2 — Data Link Layer", "Layer 3 — Network Layer", "Layer 4 — Transport Layer"], ans: 0 },
+            { dom: "Database Engine (Oracle)", q: "Which normal form requirement commands the elimination of transitively dependent structural relationships on non-prime candidate attributes?", options: ["First Normal Form (1NF)", "Second Normal Form (2NF)", "Third Normal Form (3NF)", "Boyce-Codd Normal Form (BCNF)"], ans: 2 },
+            { dom: "Database Engine (Oracle)", q: "Which explicit command structure completely flushes record variables from an Oracle DB table without wiping structural metadata schemes?", options: ["DELETE FROM TABLE", "DROP TABLE", "REMOVE TABLE STRUCTURE", "TRUNCATE TABLE"], ans: 3 },
+            { dom: "Database Engine (Oracle)", q: "What structural integrity parameter explicitly blocks the ingestion of duplicate values inside a target attribute column?", options: ["FOREIGN KEY Constraint", "UNIQUE Constraint", "CHECK Validation Clause", "NOT NULL Enforcer"], ans: 1 },
+            { dom: "Database Engine (Oracle)", q: "Which ACID processing metric handles ensuring transaction stability remains persistent even during sudden hardware power outages?", options: ["Atomicity", "Consistency", "Isolation", "Durability"], ans: 3 },
+            { dom: "PHP Server-Side Dev", q: "Which global associative array keyword variable handles accessing form parameters transmitted via the HTTP POST method layer?", options: ["$POST_DATA", "$_POST", "$HTTP_POST_VARS", "$_REQUEST_POST"], ans: 1 },
+            { dom: "PHP Server-Side Dev", q: "Which function initializes state tracking configurations for persistent cross-page user data links?", options: ["session_start()", "session_register()", "init_session()", "start_http_cookie()"], ans: 0 },
+            { dom: "PHP Server-Side Dev", q: "What is the correct structural indicator used to establish code inheritance extensions inside PHP class definitions?", options: ["implements", "extends", "inherits", "parent"], ans: 1 },
+            { dom: "PHP Server-Side Dev", q: "Which character operator sequence binds together disparate scalar string variables within output echo executions?", options: ["The plus arithmetic operator (+)", "The dot period punctuation (.)", "The ampersand logic link (&)", "The arrow symbol construct (->)"], ans: 1 },
+            { dom: "Java Programming Core", q: "Which mechanism allows a subclass to provide a specific implementation of a method that is already defined by its superclass?", options: ["Method Overloading", "Method Overriding", "Polymorphic Encapsulation", "Interface Aggregation"], ans: 1 },
+            { dom: "Java Programming Core", q: "Which primitive tracking type stores high-precision fractional numeric constants inside data calculation frameworks?", options: ["int", "float", "double", "long"], ans: 2 },
+            { dom: "Java Programming Core", q: "Which memory environment handles allocation bounds for instantiation calls triggered by the 'new' keyword block?", options: ["Stack Frame Allocation Segment", "Heap Memory space Allocation Engine", "Static Metaspace Register Block", "CPU L2 Cache Cache-Line Structure"], ans: 1 },
+            { dom: "Java Programming Core", q: "Which keyword modifier blocks a variable from modifying its contextual data payload bounds post-initialization parameters?", options: ["static", "abstract", "volatile", "final"], ans: 3 },
+            { dom: "Operating Systems / Sec", q: "What condition occurs inside processing systems when executing parameters overrun allocated memory bounds?", options: ["Deadlock System Strobe", "Buffer Overflow Structural Fault", "SQL Injected Sequence Error", "Database Schema Denormalization"], ans: 1 },
+            { dom: "Operating Systems / Sec", q: "What state occurs when two individual system threads continuously block each other by holding onto non-shareable resources?", options: ["Starvation Context Loop", "Deadlock State Intersection", "Race Condition Convergence Fault", "Thrashing Virtual Memory Loop"], ans: 1 },
+            { dom: "Operating Systems / Sec", q: "Which encryption configuration methodology relies on matching structural Public and Private key pairs?", options: ["Symmetric Cryptographic Hashing", "Asymmetric Cryptographic Architecture", "AES Rijndael Cipher Block Chain", "MD5 Non-reversible Checksum Integration"], ans: 1 },
+            { dom: "Operating Systems / Sec", q: "What component handles checking that virtual tracking segments point safely to validated physical hardware sectors?", options: ["Direct Memory Intersect (DMA)", "Memory Management Unit (MMU)", "Interrupt Vector Table (IVT)", "Kernel Process Dispatcher Node"], ans: 1 }
+        ];
+        
+        let quizIdx = 0, quizScore = 0, stateLocked = false;
+
+        // Dynamic System Clock Synchronization Engine
+        setInterval(() => {
+            const date = new Date();
+            document.getElementById('live-clock').innerText = date.toLocaleTimeString() + ' GMT';
+            const hrs = date.getHours();
+            let greet = hrs < 12 ? "Good Morning Operator," : hrs < 18 ? "Good Afternoon User," : "Good Evening Administrator,";
+            document.getElementById('live-greeting').innerText = greet;
+        }, 1000);
+
+        function toggleMobileMenu() {
+            document.getElementById('main-sidebar').classList.toggle('menu-open');
+            document.getElementById('menu-overlay').classList.toggle('active');
+        }
+
+        function toggleGatewayView(target) {
+            ['login', 'signup', 'receipt', 'admin-gate', 'admin', 'super-auth-gate', 'super-gate', 'super'].forEach(p => {
+                document.getElementById(`panel-${p}`).classList.add('hidden');
+            });
+            document.getElementById(`panel-${target}`).classList.remove('hidden');
+        }
+
+        // ==========================================
+        // SECURITY ENTRY CHALLENGES & OVERRIDES
+        // ==========================================
+        function challengeSuperAdminGatePassword() {
+            const inputPass = document.getElementById('super-gate-unlock-pass').value;
+            if (inputPass === SUPER_GATEWAY_PASSWORD) {
+                document.getElementById('super-gate-unlock-pass').value = ""; // Flush input field
+                toggleGatewayView('super-gate');
+                alert("🔓 Entry Password Verified. Initializing root authentication parameters.");
+            } else {
+                alert("❌ Verification Error: Invalid control key sequence.");
+                toggleGatewayView('login');
+            }
+        }
+
+        function verifyAdminGatewayAccess() {
+            const enteredPass = document.getElementById('gate-admin-password').value;
+            if (enteredPass === STAFF_GATEWAY_PASSWORD) {
+                document.getElementById('gate-admin-password').value = ""; 
+                toggleGatewayView('admin');
+                alert("🔓 Access Granted: Staff desk module connections active.");
+            } else {
+                alert("❌ Authentication Failed: Invalid Staff Desk Password parameter.");
+                toggleGatewayView('login');
+            }
+        }
+
+        function verifySuperGatewayAccess() {
+            const enteredId = document.getElementById('gate-super-id').value.trim();
+            const enteredPass = document.getElementById('gate-super-pass').value;
+
+            if (enteredId === "Dynicious King" && enteredPass === SUPER_GATEWAY_PASSWORD) {
+                document.getElementById('super-current-key').value = activeAdminKey;
+                toggleGatewayView('super');
+                alert("👑 Root Status Authenticated: Welcome, Dynicious King.");
+            } else {
+                alert("❌ Critical Access Denial: Root parameters invalid.");
+                toggleGatewayView('login');
+            }
+        }
+
+        // UNIVERSAL ACADEMIC GRADING SCALE COMPILER ENGINE
+        function calculateMetricGrade(percentageScore) {
+            if (percentageScore >= 95) return { letter: "A+", label: "Highest Distinction", color: "#00f2fe", bg: "rgba(0,242,254,0.15)" };
+            if (percentageScore >= 90) return { letter: "A",  label: "Excellent Evaluation", color: "#10b981", bg: "rgba(16,185,129,0.15)" };
+            if (percentageScore >= 85) return { letter: "B+", label: "Very Good Performance", color: "#a855f7", bg: "rgba(168,85,247,0.15)" };
+            if (percentageScore >= 80) return { letter: "B",  label: "Good Core Competency", color: "#3b82f6", bg: "rgba(59,130,246,0.15)" };
+            if (percentageScore >= 75) return { letter: "C+", label: "Fairly Good Stand", color: "#f59e0b", bg: "rgba(245,158,11,0.15)" };
+            if (percentageScore >= 70) return { letter: "C",  label: "Satisfactory Stand", color: "#eab308", bg: "rgba(234,179,8,0.15)" };
+            if (percentageScore >= 60) return { letter: "D",  label: "Marginal Performance Pass", color: "#94a3b8", bg: "rgba(148,163,184,0.15)" };
+            return { letter: "F", label: "Deficient Core Objective Fail", color: "#ef4444", bg: "rgba(239,68,68,0.15)" };
+        }
+
+        // STUDENT LOGIN RUNTIME ROUTER
+        function executeAuthentication() {
+            const index = document.getElementById('login-index').value.trim();
+            const pass = document.getElementById('login-pass').value;
+
+            if (localStudentsDb[index] && localStudentsDb[index].pass === pass) {
+                mountDashboardSession(localStudentsDb[index]);
+            } else {
+                alert("❌ Connection Denied:\nInvalid credential parameters. Verify Index Number and Password schema mapping.");
+            }
+        }
+
+        // PRE-REGISTRATION SEQUENCE ENGINE
+        function executeRegistration() {
+            const name = document.getElementById('reg-name').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const phone = document.getElementById('reg-phone').value.trim();
+
+            if(!name || !email || !phone) { 
+                alert("⚠️ Validation Failure: All structural profile fields must be populated."); 
+                return; 
+            }
+
+            const randomId = "TEMP-" + Math.floor(1000 + Math.random() * 9000);
+            pendingRegistrationsDb[randomId] = { name, email, phone, token: randomId };
+            localStorage.setItem("university_pending_db", JSON.stringify(pendingRegistrationsDb));
+
+            document.getElementById('rec-name').innerText = name;
+            document.getElementById('rec-token').innerText = randomId;
+            toggleGatewayView('receipt');
+        }
+
+        // ADMINISTRATIVE COMPILATION TERMINAL
+        function executeAdminGeneration() {
+            const staffInputKey = document.getElementById('admin-pass').value;
+            const studentTokenInput = document.getElementById('admin-student-token').value.trim();
+            const generatedIndexNo = document.getElementById('admin-gen-index').value.trim();
+            const generatedPassword = document.getElementById('admin-gen-pass').value;
+
+            if (staffInputKey !== activeAdminKey) {
+                alert("❌ Administrative Access Violation: Invalid Admin Desk Authorization Key.");
+                return;
+            }
+
+            if (!pendingRegistrationsDb[studentTokenInput]) {
+                alert("⚠️ System Registry Fault: Specified Student Temporary Code does not exist in pending data blocks.");
+                return;
+            }
+
+            if (!generatedIndexNo || !generatedPassword) {
+                alert("⚠️ Data Integrity Failure: Target Index Number and Password configurations cannot be abstract.");
+                return;
+            }
+            
+            if (localStudentsDb[generatedIndexNo]) {
+                alert("⚠️ Collision Exception: This target index value mapping is already linked to an active object.");
+                return;
+            }
+
+            const verifiedBaseDetails = pendingRegistrationsDb[studentTokenInput];
+
+            localStudentsDb[generatedIndexNo] = {
+                indexNo: generatedIndexNo,
+                name: verifiedBaseDetails.name,
+                email: verifiedBaseDetails.email,
+                pass: generatedPassword,
+                paidExams: false,
+                results: []
+            };
+
+            delete pendingRegistrationsDb[studentTokenInput];
+            localStorage.setItem("university_mock_db", JSON.stringify(localStudentsDb));
+            localStorage.setItem("university_pending_db", JSON.stringify(pendingRegistrationsDb));
+
+            alert(`🎉 Success: Student account generated safely under live parameters.\n\nIndex Number: ${generatedIndexNo}\nPassword: ${generatedPassword}`);
+            
+            document.getElementById('admin-student-token').value = "";
+            document.getElementById('admin-gen-index').value = "";
+            document.getElementById('admin-gen-pass').value = "";
+            toggleGatewayView('login');
+        }
+
+        function generateRandomAdminKey() {
+            const prefixes = ["DRU_CORE_", "KEY_MATRIX_", "SECURE_NODE_", "SYS_DESK_"];
+            const randomString = prefixes[Math.floor(Math.random() * prefixes.length)] + Math.floor(100000 + Math.random() * 900000);
+            document.getElementById('super-current-key').value = randomString;
+        }
+
+        function saveMutatedAdminKey() {
+            const newlyDefinedKey = document.getElementById('super-current-key').value.trim();
+            if (!newlyDefinedKey) {
+                alert("⚠️ Action Refused: Infrastructure key mappings cannot exist as empty strings.");
+                return;
+            }
+            
+            activeAdminKey = newlyDefinedKey;
+            localStorage.setItem("dru_admin_key", activeAdminKey);
+            alert(`✅ Global Update Committed:\nThe current active Staff Admin code has mutated to: [ ${activeAdminKey} ]. Staff terminals will now reject old keys.`);
+        }
+
+        function compileNewExamSecureToken() {
+            const compiledCode = "DRU-" + Math.floor(100000 + Math.random() * 900000);
+            secureExamTokensPool.push(compiledCode);
+            localStorage.setItem("dru_secure_exam_tokens", JSON.stringify(secureExamTokensPool));
+            
+            document.getElementById('super-compiled-code-log').innerText = `Generated Code: ${compiledCode}`;
+            alert(`🔑 Code Compiled! Give this unique code to the paid student:\n\n${compiledCode}`);
+        }
+
+        function mountDashboardSession(studentObj) {
+            sessionUser = studentObj;
+            document.getElementById('layer-gateway').classList.add('hidden');
+            document.getElementById('layer-dashboard').classList.remove('hidden');
+            document.getElementById('bar-user-name').innerText = studentObj.name;
+            document.getElementById('card-index-display').innerText = studentObj.indexNo;
+            
+            synchronizeExamWalletUI();
+            rebuildHistoricalResultsList();
+            routeWorkspaceView('home');
+        }
+
+        function shutdownSession() {
+            sessionUser = null;
+            document.getElementById('layer-dashboard').classList.add('hidden');
+            document.getElementById('layer-gateway').classList.remove('hidden');
+        }
+
+        function routeWorkspaceView(viewId) {
+            ['home', 'courses', 'timetable', 'quiz'].forEach(v => {
+                document.getElementById(`view-${v}`).classList.add('hidden');
+                document.getElementById(`nav-${v}`).classList.remove('active');
+            });
+            document.getElementById(`view-${viewId}`).classList.remove('hidden');
+            document.getElementById(`nav-${viewId}`).classList.add('active');
+
+            const sidebar = document.getElementById('main-sidebar');
+            const overlay = document.getElementById('menu-overlay');
+            if (sidebar.classList.contains('menu-open')) {
+                sidebar.classList.remove('menu-open');
+                overlay.classList.remove('active');
+            }
+        }
+
+        function synchronizeExamWalletUI() {
+            const walletBadge = document.getElementById('card-wallet-status');
+            const paymentGate = document.getElementById('quiz-block-payment-gate');
+            const codeGate = document.getElementById('quiz-block-code-gate');
+            const introGate = document.getElementById('quiz-block-intro');
+
+            paymentGate.classList.add('hidden');
+            codeGate.classList.add('hidden');
+            introGate.classList.add('hidden');
+
+            if (sessionUser.paidExams) {
+                walletBadge.innerText = "GHS 300.00 Cleared";
+                walletBadge.style.color = "#10b981";
+                
+                if (validatedExamCodeReference === "") {
+                    codeGate.classList.remove('hidden');
+                } else {
+                    introGate.classList.remove('hidden');
+                }
+            } else {
+                walletBadge.innerText = "Unpaid Balance";
+                walletBadge.style.color = "#ef4444";
+                paymentGate.classList.remove('hidden');
+            }
+        }
+
+        function processExamFeePayment() {
+            const confirmed = confirm("💳 DRU Billing Gateway Engine:\nAuthorize billing deduction sequence of 300 Cedis (GHS 300) from registered transaction nodes?");
+            if (confirmed) {
+                const checkPass = prompt("🔐 SECURITY CLEARANCE REQUIRED:\nEnter master clearance code to verify this financial update:");
+                if(checkPass === "5020") {
+                    sessionUser.paidExams = true;
+                    localStudentsDb[sessionUser.indexNo].paidExams = true;
+                    localStorage.setItem("university_mock_db", JSON.stringify(localStudentsDb));
+                    alert("✅ Payment Allocation Succeeded:\nAssessment fee cleared. Your exam token node is active.");
+                    synchronizeExamWalletUI();
+                } else {
+                    alert("❌ Verification Failed: Action denied.");
+                }
+            }
+        }
+
+        function validateExamAccessCode() {
+            const inputCode = document.getElementById('student-exam-access-code-input').value.trim().toUpperCase();
+            
+            if (secureExamTokensPool.includes(inputCode)) {
+                const checkPass = prompt("🔐 SECURITY CORE LOOP CONTROL:\nEnter 4-digit system override key to unlock testing module matrix:");
+                if(checkPass === "5020") {
+                    secureExamTokensPool = secureExamTokensPool.filter(token => token !== inputCode);
+                    localStorage.setItem("dru_secure_exam_tokens", JSON.stringify(secureExamTokensPool));
+                    
+                    validatedExamCodeReference = inputCode; 
+                    alert("🔓 Authorization Authenticated! Core examination sequences unlocked.");
+                    synchronizeExamWalletUI();
+                } else {
+                    alert("❌ Verification Failed: Matrix override code mismatch.");
+                }
+            } else {
+                alert("❌ Access Denied: Specified key token configuration is invalid, expired, or previously assigned.");
+            }
+        }
+
+        function initializeActiveQuiz() {
+            document.getElementById('quiz-block-intro').classList.add('hidden');
+            document.getElementById('quiz-block-results').classList.add('hidden');
+            document.getElementById('quiz-block-player').classList.remove('hidden');
+            quizIdx = 0; quizScore = 0; stateLocked = false;
+            renderQuizStep();
+        }
+
+        function renderQuizStep() {
+            stateLocked = false;
+            document.getElementById('quiz-feedback-box').classList.add('hidden');
+            document.getElementById('quiz-action-btn').innerText = "Evaluate Choice Response";
+            
+            const currentItem = quizRepo[quizIdx];
+            const progressionPercentage = (quizIdx / quizRepo.length) * 100;
+            document.getElementById('quiz-bar').style.width = `${progressionPercentage}%`;
+            document.getElementById('quiz-tracker-txt').innerText = `Question ${quizIdx + 1} of ${quizRepo.length}`;
+            document.getElementById('quiz-domain-indicator').innerText = currentItem.dom;
+
+            let appendHtml = `<div style="font-size:15px; font-weight:600; margin-bottom:20px; line-height:1.5; color:#fff;">${quizIdx + 1}. ${currentItem.q}</div>`;
+            currentItem.options.forEach((opt, idx) => {
+                appendHtml += `
+                    <label>
+                        <input type="radio" name="cyber-quiz-radio" value="${idx}" class="radio-cyber" style="display:none;">
+                        <div class="option-cyber-box"><span>${String.fromCharCode(65 + idx)}.</span> ${opt}</div>
+                    </label>`;
+            });
+            document.getElementById('quiz-dynamic-field').innerHTML = appendHtml;
+        }
+
+        function submitAnswerEvaluation() {
+            if(stateLocked) {
+                quizIdx++;
+                if(quizIdx < quizRepo.length) { renderQuizStep(); } 
+                else {
+                    document.getElementById('quiz-bar').style.width = `100%`;
+                    document.getElementById('quiz-block-player').classList.add('hidden');
+                    document.getElementById('quiz-block-results').classList.remove('hidden');
+                    document.getElementById('quiz-score-display').innerText = `${quizScore} / ${quizRepo.length}`;
+                    
+                    let feedbackTxt = "Core processing node assessment completed.";
+                    if(quizScore >= 19) feedbackTxt = "👑 Matrix Cleared! Exceptional performance across all parameters.";
+                    else if(quizScore >= 14) feedbackTxt = "⚙️ Node Status: Stable. Functional core competencies confirmed.";
+                    document.getElementById('quiz-performance-profile').innerText = feedbackTxt;
+
+                    const basePerformanceRatio = quizScore / quizRepo.length;
+                    
+                    const calculatedQuizScore = Math.min(100, Math.round((basePerformanceRatio * 100) + (Math.random() * 6 - 3)));
+                    const calculatedMidScore = Math.min(100, Math.round((basePerformanceRatio * 100) + (Math.random() * 8 - 4)));
+                    const calculatedEndScore = Math.min(100, Math.round((basePerformanceRatio * 100) + (Math.random() * 4 - 1)));
+
+                    const timestampString = new Date().toLocaleString();
+                    const examResultRecord = { 
+                        date: timestampString, 
+                        score: quizScore, 
+                        total: quizRepo.length,
+                        authCode: validatedExamCodeReference,
+                        quizRaw: calculatedQuizScore,
+                        midRaw: calculatedMidScore,
+                        endRaw: calculatedEndScore
+                    };
+                    
+                    sessionUser.results.push(examResultRecord);
+                    localStudentsDb[sessionUser.indexNo].results = sessionUser.results;
+                    localStorage.setItem("university_mock_db", JSON.stringify(localStudentsDb));
+                    
+                    validatedExamCodeReference = ""; 
+                    document.getElementById('student-exam-access-code-input').value = "";
+                    
+                    rebuildHistoricalResultsList();
+                }
+                return;
+            }
+
+            const targetRadio = document.querySelector('input[name="cyber-quiz-radio"]:checked');
+            if(!targetRadio) { alert("⚠️ Module Alert: Please commit choice value selection loops."); return; }
+
+            stateLocked = true;
+            const chosenIndex = parseInt(targetRadio.value);
+            const verifiedCorrectIndex = quizRepo[quizIdx].ans;
+            const notificationEl = document.getElementById('quiz-feedback-box');
+
+            notificationEl.classList.remove('hidden');
+            if(chosenIndex === verifiedCorrectIndex) {
+                quizScore++;
+                notificationEl.className = "quiz-feedback-box correct";
+                notificationEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Response Verified. Connection parameters clear Simon.`;
+            } else {
+                notificationEl.className = "quiz-feedback-box wrong";
+                notificationEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Threat Alert. Correct data index parameter was option: ${String.fromCharCode(65 + verifiedCorrectIndex)}`;
+            }
+
+            document.getElementById('quiz-action-btn').innerText = (quizIdx === quizRepo.length - 1) ? "Compile Evaluation Sheet" : "Advance System Step";
+        }
+
+        function rebuildHistoricalResultsList() {
+            const container = document.getElementById('results-stack-container');
+            const emptyNotice = document.getElementById('results-empty-notice');
+            
+            container.innerHTML = "";
+            if (!sessionUser.results || sessionUser.results.length === 0) {
+                emptyNotice.classList.remove('hidden');
+                return;
+            }
+            
+            emptyNotice.classList.add('hidden');
+            sessionUser.results.forEach((rec, iteration) => {
+                const qScore = rec.quizRaw || Math.round((rec.score / rec.total) * 100);
+                const mScore = rec.midRaw || Math.max(50, Math.round((rec.score / rec.total) * 100) - 5);
+                const eScore = rec.endRaw || Math.round((rec.score / rec.total) * 100);
+
+                const quizWeightedContrib = qScore * 0.10;
+                const midWeightedContrib = mScore * 0.30;
+                const endWeightedContrib = eScore * 0.60;
+                const ultimateAggregateScore = quizWeightedContrib + midWeightedContrib + endWeightedContrib;
+
+                const quizGradeObj = calculateMetricGrade(qScore);
+                const midGradeObj = calculateMetricGrade(mScore);
+                const endGradeObj = calculateMetricGrade(eScore);
+                const finalGradeObj = calculateMetricGrade(ultimateAggregateScore);
+                
+                container.innerHTML += `
+                    <div class="result-log-item">
+                        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--glass-border); padding-bottom:10px; margin-bottom:10px;">
+                            <div>
+                                <strong style="color:#fff; font-size:14px;">Sequence Certification Record Block #${iteration + 1}</strong>
+                                <br><small style="color:#64748b;">Execution Matrix Timestamp: ${rec.date}</small>
+                            </div>
+                            <div style="text-align:right;">
+                                <span style="background:${finalGradeObj.bg}; color:${finalGradeObj.color}; border: 1px solid ${finalGradeObj.color}40; padding:4px 10px; border-radius:6px; font-family:'Orbitron'; font-weight:700; font-size:14px;">
+                                    FINAL GRADE: ${finalGradeObj.letter}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="display-board-grid">
+                            <div class="display-board-col">
+                                <h5>Continuous Assessments</h5>
+                                <div class="display-board-row">
+                                    <span>Class Quizzes (10%):</span>
+                                    <span>${qScore}% <span class="grade-badge-neon" style="background:${quizGradeObj.bg}; color:${quizGradeObj.color};">${quizGradeObj.letter}</span></span>
+                                </div>
+                                <div class="display-board-row" style="color:#64748b; font-size:11px;">
+                                    <span>Quiz Weight Contribution:</span>
+                                    <span>${quizWeightedContrib.toFixed(2)}%</span>
+                                </div>
+                            </div>
+                            <div class="display-board-col">
+                                <h5>Examination Sequences</h5>
+                                <div class="display-board-row">
+                                    <span>Mid-Sem Exam (30%):</span>
+                                    <span>${mScore}% <span class="grade-badge-neon" style="background:${midGradeObj.bg}; color:${midGradeObj.color};">${midGradeObj.letter}</span></span>
+                                </div>
+                                <div class="display-board-row">
+                                    <span>End-Sem Exam (60%):</span>
+                                    <span>${eScore}% <span class="grade-badge-neon" style="background:${endGradeObj.bg}; color:${endGradeObj.color};">${endGradeObj.letter}</span></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display:flex; justify-content:space-between; margin-top:12px; font-size:12px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.05);">
+                            <span style="color:#94a3b8;"><i class="fa-solid fa-circle-info" style="color:${finalGradeObj.color};"></i> Remark: <strong>${finalGradeObj.label}</strong></span>
+                            <span style="font-family:'Orbitron'; font-weight:700; color:var(--neon-blue);">AGGREGATE: ${ultimateAggregateScore.toFixed(2)}%</span>
+                        </div>
+                        <div style="font-size:11px; color:#64748b; margin-top:6px; font-family:monospace;">
+                            Verification Code Link Parameters: ${rec.authCode || "PRE-SETTLED INFRASTRUCTURE KEY"}
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function resetQuizTrack() {
+            document.getElementById('quiz-block-results').classList.add('hidden');
+            synchronizeExamWalletUI();
+        }
+    </script>
+</body>
+</html>
