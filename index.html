@@ -341,6 +341,45 @@
         .neon-card-stat h4 { margin: 0; font-size: 12px; text-transform: uppercase; color: #64748b; letter-spacing: 1px; }
         .neon-card-stat p { margin: 12px 0 0 0; font-size: 20px; font-weight: 700; }
 
+        /* Checker Dashboard Specific Extensions */
+        .checker-dashboard-card {
+            background: linear-gradient(135deg, rgba(6, 11, 25, 0.8), rgba(15, 23, 42, 0.9));
+            border: 1px solid rgba(0, 242, 254, 0.15);
+            border-radius: var(--card-radius);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .checker-metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .checker-pill {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .checker-pill span {
+            display: block;
+            font-size: 10px;
+            text-transform: uppercase;
+            color: #64748b;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .checker-pill strong {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            color: #ffffff;
+        }
+
         .cyber-table {
             width: 100%; border-collapse: collapse; margin-top: 15px; text-align: left;
         }
@@ -436,6 +475,7 @@
         .display-board-col h5 {
             margin: 0 0 8px 0; color: var(--neon-blue); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
         }
+        .display-board-col span { color: #f1f5f9; }
         .display-board-row {
             display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.03);
         }
@@ -575,6 +615,17 @@
             </div>
 
             <div id="view-home" class="view-panel-cyber">
+                <div class="checker-dashboard-card">
+                    <h3 style="font-family:'Orbitron'; font-size:15px; text-transform:uppercase; color:var(--neon-blue); margin: 0 0 5px 0;"><i class="fa-solid fa-gauge-high"></i> Result Verification & Checker Metrics</h3>
+                    <p style="color:#64748b; font-size:12px; margin: 0 0 15px 0;">Live tracking breakdown of certified response queries and aggregate processing fields.</p>
+                    <div class="checker-metrics-grid">
+                        <div class="checker-pill"><span>Total Checked</span><strong id="chk-total">0</strong></div>
+                        <div class="checker-pill"><span>Passed Modules</span><strong id="chk-passed" style="color:var(--neon-emerald)">0</strong></div>
+                        <div class="checker-pill"><span>Failed Nodes</span><strong id="chk-failed" style="color:#ef4444;">0</strong></div>
+                        <div class="checker-pill"><span>Avg Class Score</span><strong id="chk-avg" style="color:var(--neon-purple)">0.0%</strong></div>
+                    </div>
+                </div>
+
                 <h2>Operational Tracking Parameters</h2>
                 <div class="neon-grid">
                     <div class="neon-card-stat"><h4>Structural Specialization</h4><p id="card-track-title">Information Technology</p></div>
@@ -1049,6 +1100,7 @@
                 localStorage.setItem("university_mock_db", JSON.stringify(localStudentsDb));
                 alert("✅ Resit fee verified. Testing module unlocked successfully.");
                 buildExamDirectoryGrid();
+                rebuildHistoricalResultsList();
             }
         }
 
@@ -1184,6 +1236,12 @@
             const gpaCard = document.getElementById('card-gpa-display');
             const completedCard = document.getElementById('card-completed-display');
             const standingCard = document.getElementById('card-standing-display');
+
+            // Checker Dashboard Dom Targets
+            const chkTotal = document.getElementById('chk-total');
+            const chkPassed = document.getElementById('chk-passed');
+            const chkFailed = document.getElementById('chk-failed');
+            const chkAvg = document.getElementById('chk-avg');
             
             container.innerHTML = "";
             
@@ -1192,18 +1250,33 @@
                 gpaCard.innerText = "0.00";
                 completedCard.innerText = "0 / 7";
                 standingCard.innerText = "No Data Compiled";
+
+                chkTotal.innerText = "0";
+                chkPassed.innerText = "0";
+                chkFailed.innerText = "0";
+                chkAvg.innerText = "0.0%";
                 return;
             }
             
             emptyNotice.classList.add('hidden');
             
             let accumulatedGradePoints = 0;
+            let sumTotalWeightedPercentage = 0;
+            let passedCount = 0;
+            let failedCount = 0;
             const totalModulesCount = Object.keys(examDatabases).length;
             
             sessionUser.results.forEach((rec, iteration) => {
                 const ultimateAggregateScore = (rec.quizRaw * 0.1) + (rec.midRaw * 0.3) + (rec.endRaw * 0.6);
                 const finalGradeObj = calculateMetricGrade(ultimateAggregateScore);
                 accumulatedGradePoints += finalGradeObj.gp;
+                sumTotalWeightedPercentage += ultimateAggregateScore;
+
+                if (finalGradeObj.fail) {
+                    failedCount++;
+                } else {
+                    passedCount++;
+                }
                 
                 container.innerHTML += `
                     <div class="result-log-item">
@@ -1228,9 +1301,17 @@
             });
             
             const activeCumulativeGpa = accumulatedGradePoints / sessionUser.results.length;
+            const absoluteMeanPercentage = sumTotalWeightedPercentage / sessionUser.results.length;
+
             gpaCard.innerText = activeCumulativeGpa.toFixed(2);
             completedCard.innerText = `${sessionUser.results.length} / ${totalModulesCount}`;
             standingCard.innerText = getAcademicStandingLabel(activeCumulativeGpa);
+
+            // Dynamically update the embedded Checker Results Dashboard elements
+            chkTotal.innerText = sessionUser.results.length;
+            chkPassed.innerText = passedCount;
+            chkFailed.innerText = failedCount;
+            chkAvg.innerText = absoluteMeanPercentage.toFixed(1) + "%";
         }
 
         function resetQuizTrack() {
