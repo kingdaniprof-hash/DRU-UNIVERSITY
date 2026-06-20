@@ -3,1322 +3,743 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DRU — NextGen Enterprise Academic Matrix</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Enterprise Academic Portal & Dynamic Examination Engine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --bg-space: #030712;
-            --neon-blue: #00f2fe;
-            --neon-purple: #4facfe;
-            --neon-amber: #f59e0b;
-            --neon-emerald: #10b981;
-            --glass-bg: rgba(15, 23, 42, 0.65);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --text-glow: 0 0 10px rgba(0, 242, 254, 0.4);
-            --card-radius: 16px;
-            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --primary-gradient: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            --sidebar-gradient: linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%);
+            --accent-glow: 0 0 20px rgba(37, 99, 235, 0.2);
+            --primary-color: #2563eb;
+            --secondary-color: #0f172a;
+            --accent-color: #3b82f6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --bg-light: #f8fafc;
+            --sidebar-width: 290px;
+            --border-color: #e2e8f0;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --card-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
         }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: var(--bg-space);
-            color: #f1f5f9;
+            background-color: #f1f5f9;
+            color: var(--text-main);
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        .cosmic-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at 80% 20%, rgba(79, 172, 254, 0.15) 0%, transparent 50%),
-                        radial-gradient(circle at 20% 80%, rgba(0, 242, 254, 0.1) 0%, transparent 50%);
-        }
-
         .hidden { display: none !important; }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--neon-blue); }
-
-        /* Gateway Card Frame */
-        .gateway-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            box-sizing: border-box;
+        /* GATEWAY AUTH LAYERS */
+        .auth-container {
+            display: flex; justify-content: center; align-items: center; min-height: 100vh;
+            background: radial-gradient(circle at top right, #1e1b4b, #0f172a); padding: 40px 20px;
         }
 
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--card-radius);
-            padding: 35px;
-            width: 100%;
-            max-width: 460px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            text-align: center;
-            box-sizing: border-box;
+        .auth-card {
+            background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(12px); border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6); width: 100%; max-width: 540px;
+            padding: 50px 45px; border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeIn var(--anim-speed, 0.35s) cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .brand-icon-glow {
-            font-size: 40px;
-            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 8px rgba(0,242,254,0.5));
-            margin-bottom: 15px;
-        }
-
-        .glass-card h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 20px;
-            letter-spacing: 2px;
-            margin: 0 0 5px 0;
-            color: #ffffff;
-        }
-
-        .glass-card p {
-            color: #94a3b8;
-            font-size: 13px;
-            margin: 0 0 25px 0;
-        }
-
-        .input-group-cyber {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .input-group-cyber label {
-            display: block;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--neon-blue);
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .cyber-input {
-            width: 100%;
-            padding: 14px 16px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--glass-border);
-            border-radius: 10px;
-            color: #ffffff;
-            font-size: 14px;
-            outline: none;
-            transition: var(--transition-smooth);
-            box-sizing: border-box;
-        }
-
-        .cyber-input:focus {
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
-            background: rgba(0,0,0,0.6);
-        }
-
-        .btn-cyber {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
-            border: none;
-            border-radius: 10px;
-            color: #030712;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: var(--transition-smooth);
-            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
-        }
-
-        .btn-cyber:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 242, 254, 0.5);
-            filter: brightness(1.1);
-        }
-
-        .btn-cyber.admin-btn {
-            background: linear-gradient(135deg, var(--neon-amber), #ea580c);
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
-            color: #fff;
-        }
-        .btn-cyber.admin-btn:hover { box-shadow: 0 8px 25px rgba(245, 158, 11, 0.5); }
-
-        .btn-cyber.super-btn {
-            background: linear-gradient(135deg, var(--neon-emerald), #047857);
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-            color: #fff;
-        }
-        .btn-cyber.super-btn:hover { box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5); }
-
-        .form-toggle-link {
-            font-size: 12px;
-            color: #94a3b8;
-            margin-top: 15px;
-            display: inline-block;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-        }
-
-        .form-toggle-link span { color: var(--neon-blue); font-weight: 600; }
-        .form-toggle-link:hover { color: #ffffff; }
-
-        .receipt-container {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px dashed rgba(255, 255, 255, 0.2);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: left;
-            margin-bottom: 20px;
-        }
-
-        /* Cyber Dashboard Matrix */
-        .cyber-layout {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            min-height: 100vh;
-        }
-
-        .cyber-sidebar {
-            background: rgba(6, 11, 25, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-right: 1px solid var(--glass-border);
-            padding: 30px 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: var(--transition-smooth);
-            z-index: 1000;
-        }
-
-        .sidebar-logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            background: linear-gradient(to right, #ffffff, #94a3b8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 40px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .cyber-menu { list-style: none; padding: 0; margin: 0; }
+        .logo-wrapper { display: flex; justify-content: center; margin-bottom: 25px; }
+        .logo-svg { width: 70px; height: 70px; filter: drop-shadow(0 4px 8px rgba(37, 99, 235, 0.3)); }
+        .auth-header { text-align: center; margin-bottom: 35px; }
+        .auth-header h1 { font-size: 26px; color: var(--secondary-color); font-weight: 800; letter-spacing: -0.75px; }
+        .auth-header p { font-size: 14.5px; color: var(--text-muted); margin-top: 8px; }
         
-        .cyber-menu-item {
-            padding: 14px 18px;
-            border-radius: 12px;
-            color: #94a3b8;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: var(--transition-smooth);
+        .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-group { margin-bottom: 22px; }
+        .form-group label { display: block; font-size: 11.5px; font-weight: 700; color: var(--secondary-color); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.75px; }
+        
+        .input-field, select {
+            width: 100%; padding: 14px 18px; border: 2px solid var(--border-color); border-radius: 12px;
+            font-size: 14px; font-weight: 500; outline: none; transition: all 0.2s ease; background: #f8fafc;
+            color: var(--secondary-color);
         }
+        .input-field:focus, select:focus { border-color: var(--accent-color); background: #ffffff; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15); }
 
-        .cyber-menu-item i { font-size: 16px; width: 20px; }
-
-        .cyber-menu-item:hover, .cyber-menu-item.active {
-            background: rgba(255,255,255,0.03);
-            color: #ffffff;
-            border-left: 4px solid var(--neon-blue);
-            padding-left: 14px;
+        .btn {
+            width: 100%; padding: 15px; background: var(--primary-gradient); color: #ffffff; border: none;
+            border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.22s ease; box-shadow: var(--accent-glow);
         }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(37, 99, 235, 0.4); }
+        .toggle-auth-link { text-align: center; margin-top: 25px; font-size: 13.5px; color: var(--text-muted); font-weight: 500; }
+        .toggle-auth-link span { color: var(--primary-color); cursor: pointer; font-weight: 700; }
 
-        .cyber-menu-item.active {
-            background: linear-gradient(90deg, rgba(0, 242, 254, 0.1), transparent);
-            text-shadow: var(--text-glow);
-        }
-
-        .workspace-space {
-            padding: 40px;
-            max-height: 100vh;
-            overflow-y: auto;
-            box-sizing: border-box;
-            transition: var(--transition-smooth);
-        }
-
-        .header-glass-bar {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            padding: 18px 30px;
-            border-radius: 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 35px;
-            gap: 15px;
-        }
-
-        .mobile-toggle-btn {
-            display: none;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            color: #ffffff;
-            padding: 10px 14px;
-            border-radius: 8px;
-            font-size: 18px;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-        }
-
-        .mobile-toggle-btn:hover {
-            background: rgba(0, 242, 254, 0.1);
-            color: var(--neon-blue);
-        }
-
-        .live-clock-badge {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--neon-blue);
-            font-size: 14px;
-            letter-spacing: 1px;
-            white-space: nowrap;
-        }
-
-        .view-panel-cyber {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--card-radius);
-            padding: 35px;
-            animation: fadeIn 0.4s ease;
-        }
-
-        @keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
-
-        .view-panel-cyber h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 22px;
-            margin-top: 0;
-            letter-spacing: 1.5px;
-            border-bottom: 1px solid var(--glass-border);
-            padding-bottom: 15px;
-            margin-bottom: 25px;
-        }
-
-        .neon-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 25px;
-            margin-bottom: 35px;
-        }
-
-        .neon-card-stat {
-            background: rgba(255,255,255,0.01);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 25px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .neon-card-stat::after {
-            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px;
-            background: linear-gradient(to right, var(--neon-purple), var(--neon-blue));
-        }
-
-        .neon-card-stat h4 { margin: 0; font-size: 12px; text-transform: uppercase; color: #64748b; letter-spacing: 1px; }
-        .neon-card-stat p { margin: 12px 0 0 0; font-size: 20px; font-weight: 700; }
-
-        /* Checker Dashboard Specific Extensions */
-        .checker-dashboard-card {
-            background: linear-gradient(135deg, rgba(6, 11, 25, 0.8), rgba(15, 23, 42, 0.9));
-            border: 1px solid rgba(0, 242, 254, 0.15);
-            border-radius: var(--card-radius);
-            padding: 25px;
-            margin-bottom: 30px;
+        /* APPLICATION SIDEBAR DESIGN */
+        .dashboard-layout { display: flex; min-height: 100vh; }
+        
+        .sidebar {
+            background: var(--sidebar-gradient); color: #ffffff; padding: 35px 26px; display: flex; flex-direction: column;
+            justify-content: space-between; width: var(--sidebar-width); position: fixed; top: 0; bottom: 0; left: 0;
+            z-index: 1000; box-shadow: 5px 0 30px rgba(0,0,0,0.2); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateX(0);
         }
         
-        .checker-metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .checker-pill {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            padding: 12px;
-            text-align: center;
-        }
-
-        .checker-pill span {
-            display: block;
-            font-size: 10px;
-            text-transform: uppercase;
-            color: #64748b;
-            letter-spacing: 0.5px;
-            margin-bottom: 5px;
-        }
-
-        .checker-pill strong {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 18px;
-            color: #ffffff;
-        }
-
-        .cyber-table {
-            width: 100%; border-collapse: collapse; margin-top: 15px; text-align: left;
-        }
-        .cyber-table th {
-            background: rgba(0,0,0,0.4); padding: 16px; font-size: 12px;
-            text-transform: uppercase; color: var(--neon-blue); letter-spacing: 1px;
-            border-bottom: 2px solid var(--glass-border);
-        }
-        .cyber-table td { padding: 18px 16px; border-bottom: 1px solid var(--glass-border); font-size: 14px; }
-        .cyber-table tr:hover { background: rgba(255,255,255,0.01); }
+        .sidebar-brand { display: flex; align-items: center; gap: 14px; padding-bottom: 35px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+        .brand-title { font-size: 20px; font-weight: 800; background: linear-gradient(120deg, #ffffff, #93c5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .sidebar-menu { list-style: none; margin-top: 40px; flex-grow: 1; }
         
-        .class-bubble {
-            background: rgba(0, 242, 254, 0.06);
-            border: 1px solid rgba(0, 242, 254, 0.2);
-            padding: 8px 12px; border-radius: 8px; font-size: 13px;
+        .menu-item {
+            padding: 15px 20px; border-radius: 14px; color: #94a3b8; font-size: 14.5px; font-weight: 600;
+            cursor: pointer; display: flex; align-items: center; gap: 16px; margin-bottom: 12px; transition: all 0.2s ease;
         }
+        .menu-item i { font-size: 19px; width: 24px; text-align: center; }
+        .menu-item:hover, .menu-item.active { color: #ffffff; background: rgba(255,255,255,0.04); }
+        .menu-item.active { background: var(--primary-gradient); box-shadow: 0 4px 15px rgba(37, 99, 235, 0.35); }
 
-        .notes-grid-layout {
-            display: grid; grid-template-columns: 1fr; gap: 20px;
-        }
-        .note-block-card {
-            background: rgba(15, 23, 42, 0.4); border: 1px solid var(--glass-border);
-            border-radius: 12px; padding: 25px; display: flex; flex-direction: column; justify-content: space-between;
-            gap: 15px; transition: var(--transition-smooth);
-        }
-        .note-block-card:hover { border-color: rgba(0, 242, 254, 0.3); }
-        .note-header-wrap { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-        .note-block-card h3 {
-            font-family: 'Orbitron', sans-serif; color: var(--neon-blue); font-size: 16px; margin: 0;
-        }
-        .note-content-box {
-            font-size: 13.5px; color: #cbd5e1; line-height: 1.7; background: rgba(0,0,0,0.3);
-            padding: 15px; border-radius: 8px; border-left: 3px solid var(--neon-purple); margin: 0;
-        }
-        .pdf-dl-btn {
-            background: linear-gradient(135deg, rgba(79, 172, 254, 0.2), rgba(0, 242, 254, 0.2));
-            border: 1px solid var(--neon-purple); padding: 10px 18px; border-radius: 8px;
-            color: #fff; font-size: 12px; font-weight: 600; text-decoration: none; display: inline-flex;
-            align-items: center; gap: 8px; transition: var(--transition-smooth); align-self: flex-start;
-        }
-        .pdf-dl-btn:hover { background: var(--neon-purple); color: #030712; transform: translateY(-1px); }
+        .main-content { flex-grow: 1; margin-left: var(--sidebar-width); padding: 45px; width: calc(100% - var(--sidebar-width)); transition: all 0.3s ease; }
         
-        .subject-matrix-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; margin-top: 15px;
-        }
-        .subject-exam-card {
-            background: rgba(0, 0, 0, 0.3); border: 1px solid var(--glass-border); border-radius: 10px;
-            padding: 20px; text-align: left; transition: var(--transition-smooth); display: flex; flex-direction: column; gap: 15px;
-        }
-        .subject-exam-card:hover { border-color: var(--neon-blue); background: rgba(255,255,255,0.02); }
-        .subject-exam-card h4 { font-family: 'Orbitron', sans-serif; margin: 0; font-size: 15px; color: #ffffff; letter-spacing: 0.5px; }
-        .subject-exam-card p { font-size: 12px; color: #94a3b8; margin: 0; }
-
-        .quiz-feedback-box {
-            padding: 16px; border-radius: 10px; margin-bottom: 15px; font-weight: 500; font-size: 14px;
-        }
-        .quiz-feedback-box.correct { background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #10b981; }
-        .quiz-feedback-box.wrong { background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #ef4444; }
-
-        .progress-track-bar {
-            width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-bottom: 25px; overflow: hidden;
-        }
-        .progress-track-fill {
-            height: 100%; width: 0%; background: linear-gradient(to right, var(--neon-purple), var(--neon-blue)); transition: width 0.3s ease;
+        .top-navbar {
+            display: flex; justify-content: space-between; align-items: center; background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px); padding: 20px 40px; border-radius: 22px; border: 1px solid rgba(255,255,255,0.8); margin-bottom: 40px; box-shadow: var(--card-shadow);
         }
         
-        .option-cyber-box {
-            display: flex; align-items: center; gap: 14px; background: rgba(0,0,0,0.2);
-            padding: 15px; border: 1px solid var(--glass-border); border-radius: 10px; cursor: pointer;
-            margin-bottom: 12px; transition: var(--transition-smooth);
-        }
-        .option-cyber-box:hover { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.02); }
-        .radio-cyber:checked + .option-cyber-box { border-color: var(--neon-blue); background: rgba(0, 242, 254, 0.05); }
+        .mobile-menu-toggle { display: none; background: #ffffff; border: 1px solid var(--border-color); width: 44px; height: 44px; border-radius: 10px; font-size: 18px; cursor: pointer; color: var(--secondary-color); }
+        .user-badge { display: flex; align-items: center; gap: 14px; font-size: 14.5px; font-weight: 700; background: #ffffff; padding: 10px 20px; border-radius: 14px; border: 1px solid var(--border-color); box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .user-badge i { color: var(--primary-color); background: #eff6ff; padding: 8px; border-radius: 10px; }
 
-        .quiz-domain-tag {
-            display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 11px;
-            font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;
-            background: rgba(79, 172, 254, 0.15); color: var(--neon-purple); border: 1px solid rgba(79, 172, 254, 0.3);
-        }
+        .panel-view { background: #ffffff; border-radius: 28px; padding: 45px; box-shadow: var(--card-shadow); border: 1px solid rgba(226, 232, 240, 0.7); animation: fadeIn 0.4s ease; }
+        .panel-view h2 { font-size: 26px; color: var(--secondary-color); margin-bottom: 30px; font-weight: 800; letter-spacing: -0.75px; }
 
-        .results-log-stack {
-            margin-top: 20px; display: flex; flex-direction: column; gap: 15px;
-        }
-        .result-log-item {
-            background: rgba(255,255,255,0.02); padding: 20px; border: 1px solid var(--glass-border); border-radius: 10px;
-            font-size: 13px;
-        }
+        /* GRID ARRAYS */
+        .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 24px; margin-bottom: 40px; }
+        .stat-card { background: #ffffff; border: 1px solid var(--border-color); border-radius: 20px; padding: 26px; position: relative; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.01); }
+        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; width: 5px; height: 100%; background: var(--primary-color); }
+        .stat-card.failed::before { background: var(--danger-color); }
+        .stat-card h4 { font-size: 11.5px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1.2px; margin-bottom: 12px; font-weight: 700; }
+        .stat-card p { font-size: 16px; font-weight: 800; color: var(--secondary-color); }
 
-        .display-board-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 12px;
-            background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;
-        }
-        .display-board-col h5 {
-            margin: 0 0 8px 0; color: var(--neon-blue); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
-        }
-        .display-board-col span { color: #f1f5f9; }
-        .display-board-row {
-            display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.03);
-        }
-        .display-board-row:last-child { border-bottom: none; }
+        /* TABLES */
+        .data-table-container { width: 100%; overflow-x: auto; }
+        .data-table { width: 100%; border-collapse: collapse; text-align: left; margin-top: 15px; }
+        .data-table th { background-color: #f8fafc; padding: 18px; font-size: 12.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; border-bottom: 2px solid var(--border-color); letter-spacing: 0.5px; }
+        .data-table td { padding: 20px 18px; border-bottom: 1px solid var(--border-color); font-size: 14.5px; color: var(--text-main); }
+        .data-table tbody tr:hover { background-color: #fbfcfe; }
 
-        .sidebar-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); z-index: 999;
-        }
+        /* QUIZ ENGINE COMPONENTS */
+        .quiz-meta-header { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 22px 35px; border-radius: 18px; border: 1px solid var(--border-color); margin-bottom: 25px; }
+        .timer-countdown { font-family: 'JetBrains Mono', monospace; font-size: 19px; font-weight: 700; color: var(--danger-color); background: #fef2f2; padding: 10px 20px; border-radius: 12px; border: 1px solid #fee2e2; display: flex; align-items: center; gap: 8px; }
+        .question-card-node { background: #ffffff; border: 2px solid var(--border-color); border-radius: 20px; padding: 40px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); }
+        .question-title-text { font-size: 18px; font-weight: 700; color: var(--secondary-color); margin-bottom: 30px; line-height: 1.55; }
+        .options-vertical-stack { display: flex; flex-direction: column; gap: 16px; }
+        .option-label-wrapper { display: flex; align-items: center; gap: 16px; padding: 18px 22px; border: 2px solid #e2e8f0; border-radius: 14px; cursor: pointer; transition: all 0.2s ease; font-size: 14.5px; font-weight: 500; }
+        .option-label-wrapper input { width: 20px; height: 20px; accent-color: var(--primary-color); cursor: pointer; }
+        .option-label-wrapper:hover { border-color: #cbd5e1; background: #f8fafc; }
+        .option-label-wrapper.selected { border-color: var(--primary-color); background: #eff6ff; font-weight: 600; color: var(--primary-color); }
+        
+        .resit-lock-box { background: #fff5f5; border: 2px dashed var(--danger-color); border-radius: 20px; padding: 35px; margin-top: 30px; text-align: center; }
+        .secure-code-badge { font-family: 'JetBrains Mono', monospace; font-size: 24px; font-weight: 800; color: var(--danger-color); background: #ffffff; padding: 12px 28px; border-radius: 12px; display: inline-block; margin: 20px 0; border: 1px solid #fecaca; letter-spacing: 3px; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.08); }
 
-        /* Resit Banner Styles */
-        .resit-lock-banner {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid #ef4444;
-            padding: 20px;
-            border-radius: 12px;
-            margin-top: 15px;
-            text-align: center;
-        }
+        .badge-status { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; display: inline-block; }
+        .badge-success { background: #dcfce7; color: #16a34a; }
+        .badge-danger { background: #ffeeec; color: var(--danger-color); }
+        .badge-warn { background: #fef3c7; color: #d97706; }
 
-        @media (max-width: 992px) {
-            .cyber-layout { grid-template-columns: 1fr; }
-            .cyber-sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100vh; box-sizing: border-box; }
-            .cyber-sidebar.menu-open { left: 0; box-shadow: 20px 0 50px rgba(0,0,0,0.8); }
-            .workspace-space { padding: 20px; }
-            .mobile-toggle-btn { display: block; }
-            .sidebar-overlay.active { display: block; }
-            .display-board-grid { grid-template-columns: 1fr; }
+        .transcript-footer-notes { margin-top: 40px; background: #fafafa; border: 1px dashed var(--border-color); padding: 30px; border-radius: 20px; font-size: 14px; color: var(--text-main); line-height: 1.65; }
+        .transcript-footer-notes h4 { color: var(--secondary-color); margin-bottom: 10px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        
+        @media (max-width: 1024px) { 
+            .mobile-menu-toggle { display: block; }
+            .sidebar { transform: translateX(-100%); } 
+            .sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; width: 100%; padding: 25px; } 
         }
     </style>
 </head>
 <body>
 
-    <div class="cosmic-bg"></div>
-    <div class="sidebar-overlay" id="menu-overlay" onclick="toggleMobileMenu()"></div>
+    <div class="auth-container" id="auth-layer">
+        <!-- SIGN IN MODULE -->
+        <div class="auth-card" id="login-window-card">
+            <div class="logo-wrapper">
+                <svg class="logo-svg" viewBox="0 0 24 24" fill="none"><path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" fill="#2563EB"/></svg>
+            </div>
+            <div class="auth-header">
+                <h1>CAMPUS HUB MANAGEMENT</h1>
+                <p>Sign into your active electronic profile</p>
+            </div>
+            <div class="form-group">
+                <label>Student Index Identifier</label>
+                <input type="text" id="input-login-index" class="input-field" placeholder="e.g. STU-2026-101" value="STU-2026-101">
+            </div>
+            <div class="form-group">
+                <label>Security Keyphrase</label>
+                <input type="password" id="input-login-pass" class="input-field" value="password123">
+            </div>
+            <button class="btn" onclick="handleLoginSubmit()">Verify Authentication Matrix</button>
+            <div class="toggle-auth-link">New enrollment matrix? <span onclick="toggleAuthWindows(true)">Generate a student account instantly</span></div>
+        </div>
 
-    <div class="gateway-wrapper" id="layer-gateway">
-        <div class="glass-card">
-            <div class="brand-icon-glow"><i class="fa-solid fa-graduation-cap"></i></div>
-            <h1 id="gateway-title">DRU PORTAL HUD</h1>
-            <p id="gateway-subtitle">Secure Academic Infrastructure Access</p>
-
-            <div id="panel-login">
-                <div class="input-group-cyber">
-                    <label>Identification / Index No</label>
-                    <input type="text" id="login-index" class="cyber-input" placeholder="e.g. DRU/SIT/2026/101" value="DRU/SIT/2026/101">
+        <!-- NEW REGISTER MODULE -->
+        <div class="auth-card hidden" id="register-window-card">
+            <div class="logo-wrapper">
+                <svg class="logo-svg" viewBox="0 0 24 24" fill="none"><path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" fill="#10B981"/></svg>
+            </div>
+            <div class="auth-header">
+                <h1>PORTAL REGISTRATION</h1>
+                <p>Register immediately to unlock active course boards and assessments</p>
+            </div>
+            <div class="form-group">
+                <label>Full Legal Name</label>
+                <input type="text" id="reg-name" class="input-field" placeholder="e.g. Dynicious King" value="Dynicious King">
+            </div>
+            <div class="form-grid-2">
+                <div class="form-group">
+                    <label>Academic Track</label>
+                    <select id="reg-program">
+                        <option value="Information Technology">Information Technology</option>
+                        <option value="Computer Engineering">Computer Engineering</option>
+                        <option value="Software Engineering">Software Engineering</option>
+                    </select>
                 </div>
-                <div class="input-group-cyber">
-                    <label>Portal Secret Password</label>
-                    <input type="password" id="login-pass" class="cyber-input" placeholder="••••••••" value="admin123">
+                <div class="form-group">
+                    <label>Assigned Level Tier</label>
+                    <select id="reg-level">
+                        <option value="Level 100">Level 100</option>
+                        <option value="Level 200">Level 200</option>
+                        <option value="Level 300">Level 300</option>
+                        <option value="Level 400">Level 400</option>
+                    </select>
                 </div>
-                <button class="btn-cyber" onclick="executeAuthentication()">Establish Connection</button>
-                <div class="form-toggle-link" onclick="toggleGatewayView('signup')">New student entry? <span>Register Details</span></div><br>
-                <div class="form-toggle-link" style="color:var(--neon-amber)" onclick="toggleGatewayView('admin-gate')"><i class="fa-solid fa-screwdriver-wrench"></i> Administrative Desk Node</div><br>
-                <div class="form-toggle-link" style="color:var(--neon-emerald); font-weight:700;" onclick="toggleGatewayView('super-auth-gate')"><i class="fa-solid fa-key"></i> Super Admin Root Control Panel</div>
             </div>
-
-            <div id="panel-signup" class="hidden">
-                <div class="input-group-cyber"><label>Full Legal Name</label><input type="text" id="reg-name" class="cyber-input" placeholder="e.g. Samuel Amissah"></div>
-                <div class="input-group-cyber"><label>Active Email Node</label><input type="email" id="reg-email" class="cyber-input" placeholder="name@example.com"></div>
-                <div class="input-group-cyber"><label>Mobile Contact Line</label><input type="text" id="reg-phone" class="cyber-input" placeholder="e.g. +233 24 000 0000"></div>
-                <button class="btn-cyber" onclick="executeRegistration()">Compile Registration Metadata</button>
-                <div class="form-toggle-link" onclick="toggleGatewayView('login')">Back to <span>System Login</span></div>
+            <div class="form-group">
+                <label>Configure Password</label>
+                <input type="password" id="reg-pass" class="input-field" value="password123">
             </div>
-
-            <div id="panel-receipt" class="hidden">
-                <div class="receipt-container">
-                    <h4 style="margin:0 0 10px 0; color:var(--neon-amber); text-transform:uppercase; font-family:'Orbitron'; font-size:12px;"><i class="fa-solid fa-receipt"></i> Temporary Registration Receipt</h4>
-                    <p style="font-size:13px; margin:5px 0;"><strong>Name:</strong> <span id="rec-name">---</span></p>
-                    <p style="font-size:13px; margin:5px 0;"><strong>Temporary Code:</strong> <span id="rec-token" style="color:var(--neon-blue); font-family:monospace; font-weight:700;">---</span></p>
-                </div>
-                <button class="btn-cyber" onclick="toggleGatewayView('login')">Return to System Login</button>
-            </div>
-
-            <div id="panel-admin-gate" class="hidden">
-                <div class="input-group-cyber"><label>Administrative Login Password</label><input type="password" id="gate-admin-password" class="cyber-input" placeholder="••••••••"></div>
-                <button class="btn-cyber admin-btn" onclick="verifyAdminGatewayAccess()">Unlock Terminal Node</button>
-                <div class="form-toggle-link" onclick="toggleGatewayView('login')">Cancel and return to <span>Student Login</span></div>
-            </div>
-
-            <div id="panel-admin" class="hidden">
-                <div class="input-group-cyber"><label>Admin Infrastructure Key</label><input type="password" id="admin-pass" class="cyber-input" placeholder="Enter active admin key"></div>
-                <div class="input-group-cyber"><label>Student Temporary Code</label><input type="text" id="admin-student-token" class="cyber-input" placeholder="e.g. TEMP-XXXX"></div>
-                <hr style="border:0; border-top:1px solid var(--glass-border); margin:20px 0;">
-                <div class="input-group-cyber"><label>Generate Student Index No</label><input type="text" id="admin-gen-index" class="cyber-input" placeholder="e.g. DRU/SIT/2026/102"></div>
-                <div class="input-group-cyber"><label>Generate Student Password</label><input type="text" id="admin-gen-pass" class="cyber-input" placeholder="Define portal password"></div>
-                <button class="btn-cyber admin-btn" onclick="executeAdminGeneration()">Authorize Credentials</button>
-                <div class="form-toggle-link" onclick="toggleGatewayView('login')">Cancel to <span>Student Login</span></div>
-            </div>
-
-            <div id="panel-super-auth-gate" class="hidden">
-                <div class="input-group-cyber"><label>Root Panel Unlock Password</label><input type="password" id="super-gate-unlock-pass" class="cyber-input" placeholder="••••••••"></div>
-                <button class="btn-cyber" onclick="challengeSuperAdminGatePassword()">Initialize Interface Node</button>
-                <div class="form-toggle-link" onclick="toggleGatewayView('login')">Cancel to <span>Student Login</span></div>
-            </div>
-
-            <div id="panel-super-gate" class="hidden">
-                <div class="input-group-cyber"><label>Super User ID</label><input type="text" id="gate-super-id" class="cyber-input" value="Dynicious King"></div>
-                <div class="input-group-cyber"><label>Super Security Pass</label><input type="password" id="gate-super-pass" class="cyber-input" value="5020"></div>
-                <button class="btn-cyber super-btn" onclick="verifySuperGatewayAccess()">Authorize Matrix Root Link</button>
-                <div class="form-toggle-link" onclick="toggleGatewayView('login')">Cancel to <span>Student Login</span></div>
-            </div>
-
-            <div id="panel-super" class="hidden">
-                <div id="super-control-elements" style="text-align:left; background:rgba(0,0,0,0.3); padding:15px; border-radius:8px; border:1px solid rgba(16,185,129,0.2);">
-                    <div class="input-group-cyber"><label style="color:var(--neon-emerald);">Active Admin Key</label><input type="text" id="super-current-key" class="cyber-input"></div>
-                    <button class="btn-cyber super-btn" style="padding:10px; font-size:12px; margin-bottom:10px;" onclick="generateRandomAdminKey()">Generate New Key Variant</button>
-                    <button class="btn-cyber" style="padding:10px; font-size:12px; margin-bottom:15px;" onclick="saveMutatedAdminKey()">Commit Key Overwrite</button>
-                    <hr style="border:0; border-top:1px solid var(--glass-border); margin:15px 0;">
-                    <button class="btn-cyber admin-btn" style="padding:10px; font-size:12px;" onclick="compileNewExamSecureToken()">Compile New Paid Exam Code</button>
-                    <div id="super-compiled-code-log" style="font-size:14px; font-family:'Orbitron'; color:var(--neon-emerald); text-align:center; font-weight:700; margin-top:10px;"></div>
-                </div>
-                <div class="form-toggle-link" onclick="location.reload()">Exit control console and 'Reset'</div>
-            </div>
+            <button class="btn" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);" onclick="handleRegistrationSubmit()">Instantiate Dynamic Profile Node</button>
+            <div class="toggle-auth-link">Already verified? <span onclick="toggleAuthWindows(false)">Sign in here</span></div>
         </div>
     </div>
 
-    <div class="cyber-layout hidden" id="layer-dashboard">
-        <div class="cyber-sidebar" id="main-sidebar">
+    <!-- MAIN DASHBOARD CONTENT WRAPPER -->
+    <div class="dashboard-layout hidden" id="app-layer">
+        <div class="sidebar" id="app-sidebar">
             <div>
-                <div class="sidebar-logo"><i class="fa-solid fa-shield-halved" style="color: var(--neon-blue);"></i> DRU HUD</div>
-                <ul class="cyber-menu">
-                    <li class="cyber-menu-item active" id="nav-home" onclick="routeWorkspaceView('home')"><i class="fa-solid fa-chart-pie"></i>Overview</li>
-                    <li class="cyber-menu-item" id="nav-courses" onclick="routeWorkspaceView('courses')"><i class="fa-solid fa-folder-open"></i>Curriculum Notes</li>
-                    <li class="cyber-menu-item" id="nav-timetable" onclick="routeWorkspaceView('timetable')"><i class="fa-solid fa-calendar-days"></i>Class Schedule</li>
-                    <li class="cyber-menu-item" id="nav-quiz" onclick="routeWorkspaceView('quiz')"><i class="fa-solid fa-brain"></i>Online Exams</li>
+                <div class="sidebar-brand">
+                    <svg style="width:34px;" viewBox="0 0 24 24" fill="none"><path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" fill="#3B82F6"/></svg>
+                    <span class="brand-title">Campus Hub v2.6</span>
+                </div>
+                <ul class="sidebar-menu">
+                    <li class="menu-item active" id="nav-home" onclick="switchView('home')"><i class="fa-solid fa-chart-pie"></i>Overview Matrix</li>
+                    <li class="menu-item" id="nav-registration" onclick="switchView('registration')"><i class="fa-solid fa-clipboard-list"></i>Course Enrollment</li>
+                    <li class="menu-item" id="nav-quiz" onclick="switchView('quiz')"><i class="fa-solid fa-graduation-cap"></i>Examination Terminal</li>
+                    <li class="menu-item" id="nav-grades" onclick="switchView('grades')"><i class="fa-solid fa-file-invoice"></i>Academic Ledger</li>
                 </ul>
             </div>
-            <div class="cyber-menu-item" style="color:#ef4444;" onclick="shutdownSession()"><i class="fa-solid fa-power-off"></i>Disconnect</div>
+            <div class="menu-item" style="color: #f87171; background: rgba(239, 68, 68, 0.05);" onclick="handleLogout()"><i class="fa-solid fa-power-off"></i>Term Session</div>
         </div>
 
-        <div class="workspace-space">
-            <div class="header-glass-bar">
-                <button class="mobile-toggle-btn" onclick="toggleMobileMenu()"><i class="fa-solid fa-bars"></i></button>
-                <div style="flex-grow: 1;"><span id="live-greeting" style="color:#94a3b8; font-weight:500;">System online,</span> <strong id="bar-user-name" style="color:#fff;">---</strong></div>
-                <div class="live-clock-badge" id="live-clock">00:00:00 UTC</div>
+        <div class="main-content">
+            <div class="top-navbar">
+                <button class="mobile-menu-toggle" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+                <div style="font-weight: 700; font-size: 15px; color: var(--secondary-color);">Operational Cycle: <span style="color: var(--primary-color);">2025 / 2026</span></div>
+                <div class="user-badge"><i class="fa-solid fa-id-badge"></i><span id="display-user-name">Loading Profile...</span></div>
             </div>
 
-            <div id="view-home" class="view-panel-cyber">
-                <div class="checker-dashboard-card">
-                    <h3 style="font-family:'Orbitron'; font-size:15px; text-transform:uppercase; color:var(--neon-blue); margin: 0 0 5px 0;"><i class="fa-solid fa-gauge-high"></i> Result Verification & Checker Metrics</h3>
-                    <p style="color:#64748b; font-size:12px; margin: 0 0 15px 0;">Live tracking breakdown of certified response queries and aggregate processing fields.</p>
-                    <div class="checker-metrics-grid">
-                        <div class="checker-pill"><span>Total Checked</span><strong id="chk-total">0</strong></div>
-                        <div class="checker-pill"><span>Passed Modules</span><strong id="chk-passed" style="color:var(--neon-emerald)">0</strong></div>
-                        <div class="checker-pill"><span>Failed Nodes</span><strong id="chk-failed" style="color:#ef4444;">0</strong></div>
-                        <div class="checker-pill"><span>Avg Class Score</span><strong id="chk-avg" style="color:var(--neon-purple)">0.0%</strong></div>
-                    </div>
+            <!-- VIEW: OVERVIEW -->
+            <div id="view-home" class="panel-view">
+                <h2>Operational Control Overview</h2>
+                <div class="grid-stats">
+                    <div class="stat-card"><h4>Pathway Directive</h4><p id="profile-program">Loading...</p></div>
+                    <div class="stat-card"><h4>Class Segment</h4><p id="profile-level">Loading...</p></div>
+                    <div class="stat-card"><h4>Identity Registry</h4><p id="profile-index">Loading...</p></div>
+                    <div class="stat-card" id="standing-card-wrapper"><h4>Evaluation Status</h4><p id="profile-standing" style="color:var(--success-color);">Clearance Established</p></div>
                 </div>
+                <div style="background: #eff6ff; border-left: 5px solid var(--primary-color); padding: 30px; border-radius: 20px;">
+                    <h4 style="color: var(--secondary-color); margin-bottom: 10px; font-weight: 800;">System Notification Directive</h4>
+                    <p style="font-size: 14.5px; color: var(--text-muted); line-height: 1.7;">Your multi-tiered student console has integrated successfully. Ensure you head to the <strong>Course Enrollment</strong> tab to review your extended path curriculum before entering the testing terminal.</p>
+                </div>
+            </div>
 
-                <h2>Operational Tracking Parameters</h2>
-                <div class="neon-grid">
-                    <div class="neon-card-stat"><h4>Structural Specialization</h4><p id="card-track-title">Information Technology</p></div>
-                    <div class="neon-card-stat"><h4>Exam Wallet Clearance</h4><p id="card-wallet-status" style="color:#ef4444;">Pending Payment</p></div>
-                    <div class="neon-card-stat"><h4>System Access Token</h4><p id="card-index-display" style="font-family:'Orbitron'; font-size:15px; color:var(--neon-blue);">DRU/SIT/2026/000</p></div>
-                </div>
-
-                <h2>Academic Performance Matrix</h2>
-                <div class="neon-grid">
-                    <div class="neon-card-stat" style="border-color: var(--neon-blue);">
-                        <h4>Cumulative GPA</h4>
-                        <p id="card-gpa-display" style="font-family:'Orbitron'; font-size:28px; color: var(--neon-blue);">0.00</p>
-                    </div>
-                    <div class="neon-card-stat" style="border-color: var(--neon-purple);">
-                        <h4>Modules Completed</h4>
-                        <p id="card-completed-display" style="font-family:'Orbitron'; font-size:28px; color: var(--neon-purple);">0 / 7</p>
-                    </div>
-                    <div class="neon-card-stat" style="border-color: var(--neon-emerald);">
-                        <h4>Academic Standing</h4>
-                        <p id="card-standing-display" style="font-size:16px; font-weight: 600; color: var(--neon-emerald); margin-top:16px;">No Data Compiled</p>
-                    </div>
-                </div>
+            <!-- VIEW: EXAMINATION TERMINAL -->
+            <div id="view-quiz" class="panel-view hidden">
+                <h2>Interactive Examination Terminal</h2>
                 
-                <h3 style="font-family:'Orbitron'; font-size:14px; text-transform:uppercase; color:var(--neon-blue); margin: 30px 0 15px 0;"><i class="fa-solid fa-square-poll-vertical"></i> Transmitted Online Exam Results Dashboard</h3>
-                <div class="view-panel-cyber" style="background:rgba(0,0,0,0.2); padding: 20px;">
-                    <div id="results-empty-notice" style="font-size:13px; color:#64748b; text-align:center; padding:10px;">No historical exam sequences compiled yet. Settle evaluation balances to initialize testing nodes.</div>
-                    <div id="results-stack-container" class="results-log-stack"></div>
+                <div id="quiz-landing-frame" class="options-vertical-stack">
+                    <div style="background: #f8fafc; padding: 40px; border-radius: 20px; border: 1px solid var(--border-color);">
+                        <h3 style="margin-bottom: 12px; font-weight: 800;" id="assessment-panel-title">Unified Technical Assessment Portfolio</h3>
+                        <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 25px; line-height: 1.65;">This high-tier diagnostics frame contains **15 direct domain specific validation questions**. You need a baseline structural score of **50% (8/15 Correct Marks)** to bypass lock flags. If you fail, access is revoked until a clearance token is validated.</p>
+                        <button class="btn" style="width: auto; padding: 16px 40px;" onclick="initializeExamSession()">Launch Examination Sequence</button>
+                    </div>
                 </div>
-            </div>
 
-            <div id="view-courses" class="view-panel-cyber hidden">
-                <h2>Real Curriculum Core Notes & PDF Vault</h2>
-                <p style="color:#94a3b8; font-size:13px; margin-bottom:25px;">Review authoritative course data metrics and acquire official digital manuals below.</p>
-                
-                <div class="notes-grid-layout">
-                    <div class="note-block-card">
-                        <div class="note-header-wrap">
-                            <h3>📚 E-Commerce Ecosystem Architectures</h3>
-                            <a href="pdfs/ecommerce-core-notes.pdf" download class="pdf-dl-btn"><i class="fa-solid fa-file-pdf"></i> Download Notes PDF</a>
-                        </div>
-                        <div class="note-content-box">
-                            Focuses on business-to-business (B2B) and business-to-consumer (B2C) framework deployment topologies. Understand electronic payment encryption loops, SSL handshake logic matrices, and persistent shopping cart operational state models.
-                        </div>
+                <div id="quiz-active-engine-frame" class="hidden">
+                    <div class="quiz-meta-header">
+                        <div style="font-weight: 700; font-size: 15px;">Tracking Element: <span id="current-question-idx-lbl" style="color: var(--primary-color);">1</span> / 15</div>
+                        <div class="timer-countdown"><i class="fa-solid fa-stopwatch"></i> <span id="quiz-clock-ticker">15:00</span></div>
                     </div>
-
-                    <div class="note-block-card">
-                        <div class="note-header-wrap">
-                            <h3>📚 Software Engineering Paradigms & SDLC</h3>
-                            <a href="pdfs/software-engineering-systems.pdf" download class="pdf-dl-btn"><i class="fa-solid fa-file-pdf"></i> Download Notes PDF</a>
-                        </div>
-                        <div class="note-content-box">
-                            Detailed structural breakdown of iterative development cycles. Encompasses Agile epic backlogs, Waterfall gating phases, structural component component lifecycle verification patterns, validation testing matrices, and modular refactoring metrics.
-                        </div>
+                    <div class="question-card-node">
+                        <div class="question-title-text" id="target-question-string-render">Evaluating Array Stream Data...</div>
+                        <div class="options-vertical-stack" id="target-options-render-stack"></div>
                     </div>
-
-                    <div class="note-block-card">
-                        <div class="note-header-wrap">
-                            <h3>📚 Java Object-Oriented Development</h3>
-                            <a href="pdfs/java-oop-advanced-notes.pdf" download class="pdf-dl-btn"><i class="fa-solid fa-file-pdf"></i> Download Notes PDF</a>
-                        </div>
-                        <div class="note-content-box">
-                            Explores advanced polymorphism tracking, interface abstract structures, dynamic runtime method overrides, explicit heap runtime allocations inside JVM memory scopes, multithreading bounds, and garbage collection metrics.
-                        </div>
+                    <div class="quiz-meta-header" style="margin-top:25px; background:transparent; padding:0; border:none;">
+                        <button class="btn" id="quiz-prev-btn" style="background:#e2e8f0; color:var(--secondary-color); width:auto; padding:14px 30px;" onclick="navigateExamIndex(-1)">Back Sequence</button>
+                        <button class="btn" id="quiz-next-btn" style="width:auto; padding:14px 45px;" onclick="navigateExamIndex(1)">Advance Metric</button>
                     </div>
+                </div>
 
-                    <div class="note-block-card">
-                        <div class="note-header-wrap">
-                            <h3>📚 Principles of Strategic Management</h3>
-                            <a href="pdfs/principles-management-framework.pdf" download class="pdf-dl-btn"><i class="fa-solid fa-file-pdf"></i> Download Notes PDF</a>
+                <div id="quiz-score-report-frame" class="hidden" style="text-align: center; padding: 25px 0;">
+                    <div style="max-width: 500px; margin: 0 auto;">
+                        <div id="score-radial" style="font-size: 56px; font-weight: 900; margin-bottom: 15px; color: var(--primary-color); letter-spacing: -1px;">0 / 15</div>
+                        <h3 id="score-status-title" style="font-size: 24px; font-weight: 800; margin-bottom: 12px;">SYSTEM PROCESSED</h3>
+                        <p id="score-details-text" style="color: var(--text-muted); margin-bottom: 30px; font-size: 15px; line-height: 1.6;"></p>
+                        
+                        <div id="resit-gate-box" class="resit-lock-box hidden">
+                            <h4 style="color: var(--danger-color); font-weight: 800;"><i class="fa-solid fa-triangle-exclamation"></i> Security Exception Lock Triggered</h4>
+                            <p style="font-size: 13.5px; color: var(--text-muted); margin-top: 8px; line-height: 1.5;">Your calculated efficacy index dropped below the 50% line. To override this flag and authorize an immediate evaluation resit, present the tracking bypass token below:</p>
+                            <div class="secure-code-badge" id="generated-resit-code">XXXX-XXXX</div>
+                            <div class="form-group" style="text-align: left; margin-top: 15px;">
+                                <label style="font-size: 11px;">Input Authentication Override Token</label>
+                                <input type="text" id="input-clearance-key" class="input-field" style="text-align:center; font-family:'JetBrains Mono', monospace; letter-spacing:2px;" placeholder="Paste generated sequence string">
+                            </div>
+                            <button class="btn" style="background: var(--secondary-color);" onclick="verifyResitClearanceCode()">Authenticate Token &amp; Flush Terminal</button>
                         </div>
-                        <div class="note-content-box">
-                            Covers historical operational models, Taylorist optimization metrics, Fayol's organizational structures, and advanced corporate tracking fields. Analyzes planning, matrixed organizing structures, directional leadership, and control feedback structures.
-                        </div>
-                    </div>
 
-                    <div class="note-block-card">
-                        <div class="note-header-wrap">
-                            <h3>📚 Computer Networks & Interior Routing Protocols</h3>
-                            <a href="pdfs/computer-networks-ospf-routing.pdf" download class="pdf-dl-btn"><i class="fa-solid fa-file-pdf"></i> Download Notes PDF</a>
-                        </div>
-                        <div class="note-content-box">
-                            Link-State routing execution tracks. Covers Open Shortest Path First (OSPF) configurations inside Area 0 core zones, Dijkstra Shortest Path algorithm convergence updates, and ARP mapping parameters between logical IP and physical MAC addresses.
-                        </div>
-                    </div>
-
-                    <div class="note-block-card">
-                        <div class="note-header-wrap">
-                            <h3>📚 Human-Computer Interaction UX Metrics</h3>
-                            <a href="pdfs/hci-interaction-ux-frameworks.pdf" download class="pdf-dl-btn"><i class="fa-solid fa-file-pdf"></i> Download Notes PDF</a>
-                        </div>
-                        <div class="note-content-box">
-                            Analyzes human parsing efficiency bounds, cognitive cognitive load models, and interactive software designs. Implements Jakob Nielsen's usability heuristics with custom feedback system states and responsive layout guidelines.
-                        </div>
-                    </div>
-
-                    <div class="note-block-card">
-                        <div class="note-header-wrap">
-                            <h3>📚 Operating System Kernels & Process Scheduling</h3>
-                            <a href="pdfs/operating-systems-kernel-architecture.pdf" download class="pdf-dl-btn"><i class="fa-solid fa-file-pdf"></i> Download Notes PDF</a>
-                        </div>
-                        <div class="note-content-box">
-                            Focuses on memory mapping layers inside the MMU, CPU process scheduling pipelines (Round Robin, Priority Starvation structures), deadlock race state scenarios, and low-level resource lock parameters.
-                        </div>
+                        <button id="normal-reset-btn" class="btn hidden" style="width:auto; padding:15px 40px;" onclick="resetExamLanding()">Return To Station</button>
                     </div>
                 </div>
             </div>
 
-            <div id="view-timetable" class="view-panel-cyber hidden">
-                <h2>Rotational Lecture Schedule Grid</h2>
-                <div style="overflow-x: auto;">
-                    <table class="cyber-table">
-                        <thead>
-                            <tr><th>Day Node</th><th>08:00 - 10:30</th><th>11:00 - 13:30</th><th>14:00 - 16:30</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>Monday</td><td><div class="class-bubble">DRU-301: Advanced Network Architecture</div></td><td>-- System Idle --</td><td><div class="class-bubble" style="border-color:var(--neon-purple);">DRU-305: Database Optimization</div></td></tr>
-                            <tr><td>Tuesday</td><td>-- System Idle --</td><td><div class="class-bubble">DRU-309: Web App Compilation</div></td><td><div class="class-bubble">DRU-311: Applied Cyber Systems</div></td></tr>
-                        </tbody>
+            <!-- VIEW: COURSE ENROLLMENT -->
+            <div id="view-registration" class="panel-view hidden">
+                <h2>Curriculum Board Matrix</h2>
+                <div style="background: #f8fafc; padding: 18px 25px; border-radius: 14px; margin-bottom: 25px; font-weight: 600; font-size: 14.5px; color: var(--text-main); border: 1px solid var(--border-color);">
+                    Showing specialized diagnostic tracks generated for your verified progression layer.
+                </div>
+                <div class="data-table-container">
+                    <table class="data-table">
+                        <thead><tr><th>Status</th><th>Code</th><th>Course Descriptor Title</th><th>Weight</th><th>Classification</th></tr></thead>
+                        <tbody id="registration-table-body"></tbody>
                     </table>
                 </div>
             </div>
 
-            <div id="view-quiz" class="view-panel-cyber hidden">
-                <h2>Electronic Assessment Framework</h2>
-                
-                <div id="quiz-block-payment-gate" style="text-align: center; padding: 40px 20px;">
-                    <div style="font-size: 54px; color: var(--neon-purple); margin-bottom: 20px;"><i class="fa-solid fa-credit-card"></i></div>
-                    <h3 style="font-family:'Orbitron'; letter-spacing: 1px;">Online Examination Portal Access Locked</h3>
-                    <p style="color:#94a3b8; font-size: 14px; max-width: 500px; margin: 10px auto 30px auto; line-height:1.6;">
-                        Accessing the Comprehensive multi-module exam tracks requires an online access settlement verification fee of <strong>300 GHS (Ghana Cedis)</strong>.
-                    </p>
-                    <button class="btn-cyber" style="width:auto; padding:15px 40px;" onclick="processExamFeePayment()">Authorize 300 GHS Payment</button>
+            <!-- VIEW: ACADEMIC LEDGER -->
+            <div id="view-grades" class="panel-view hidden">
+                <h2>Academic Ledger &amp; Performance Indexes</h2>
+                <div class="data-table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>Code</th><th>Academic Module Title</th><th>Weight Units</th><th>Calculated Score</th><th>Alpha Grade</th><th>Verification Metric</th></tr>
+                        </thead>
+                        <tbody id="transcript-table-body"></tbody>
+                    </table>
                 </div>
-
-                <div id="quiz-block-code-gate" class="hidden" style="text-align: center; padding: 40px 20px;">
-                    <div style="font-size: 54px; color: var(--neon-amber); margin-bottom: 20px;"><i class="fa-solid fa-lock-open"></i></div>
-                    <h3 style="font-family:'Orbitron'; letter-spacing: 1px;">System Access Token Verification Key Required</h3>
-                    <div class="input-group-cyber" style="max-width: 320px; margin: 0 auto 20px auto;">
-                        <label style="text-align: center; display: block;">Enter Alphanumeric Exam Code / Index Number</label>
-                        <input type="text" id="student-exam-access-code-input" class="cyber-input" style="text-align: center; font-family:'Orbitron'; font-size: 14px; letter-spacing: 1px;" placeholder="e.g. DRU/SIT/2026/101">
-                    </div>
-                    <button class="btn-cyber" style="width:auto; padding:12px 35px;" onclick="validateExamAccessCode()">Verify Access Token</button>
-                </div>
-
-                <div id="quiz-block-intro" class="hidden">
-                    <p style="color:#94a3b8; font-size:14px; line-height: 1.6; margin-bottom: 25px;">
-                        Authentication clear! Select your target exam node below. Each session evaluation tracks subject-specific criteria.
-                    </p>
-                    <div class="subject-matrix-grid" id="exam-directory-grid">
-                        </div>
-                </div>
-
-                <div id="quiz-block-player" class="hidden">
-                    <div class="progress-track-bar"><div class="progress-track-fill" id="quiz-bar"></div></div>
-                    <div id="quiz-domain-indicator" class="quiz-domain-tag">Subject Module</div>
-                    <div id="quiz-feedback-box" class="quiz-feedback-box hidden"></div>
-                    <div id="quiz-dynamic-field"></div>
-                    <div style="display:flex; justify-content:space-between; margin-top:25px; align-items:center; gap: 10px;">
-                        <span id="quiz-tracker-txt" style="font-size:12px; color:#64748b;">Question 1</span>
-                        <button class="btn-cyber" id="quiz-action-btn" style="width:auto; padding:10px 22px;" onclick="submitAnswerEvaluation()">Evaluate Choice Response</button>
-                    </div>
-                </div>
-
-                <div id="quiz-block-results" class="hidden" style="text-align:center; padding:20px;">
-                    <h3 style="color:var(--neon-blue); font-family:'Orbitron';">Sequence Concluded</h3>
-                    <h1 id="quiz-score-display" style="font-size:48px; margin:5px 0; font-family:'Orbitron'; text-shadow:var(--text-glow);">0</h1>
-                    <p id="quiz-performance-profile" style="color:#94a3b8; font-size:14px; margin-bottom:25px;"></p>
-                    <div id="quiz-resit-payment-box" class="hidden"></div>
-                    <button class="btn-cyber" style="width:auto; padding:10px 20px; margin-top:10px;" onclick="resetQuizTrack()">Return to Exam Directory</button>
+                <div class="transcript-footer-notes">
+                    <h4><i class="fa-solid fa-circle-info"></i> Automated Grading Policy &amp; Security Overrides</h4>
+                    <p>Calculated grades are updated on the fly within active state tables immediately following submission. Scoring a failing metric (<50%) flags the interface node, generating a dynamic clearance override value required for authorization back inside testing clusters.</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        const STAFF_GATEWAY_PASSWORD = "5020"; 
-        const SUPER_GATEWAY_PASSWORD = "5020"; 
-
-        let activeAdminKey = localStorage.getItem("dru_admin_key") || "dru_root_2026";
-
-        let localStudentsDb = JSON.parse(localStorage.getItem("university_mock_db")) || {
-            "DRU/SIT/2026/101": { indexNo: "DRU/SIT/2026/101", name: "Dynicious King", email: "dyn@gmail.com", pass: "admin123", paidExams: false, results: [], resitOwed: {} }
+        // EXPANDED MULTI-COURSE DATABASE WITH MULTIPLE PATHWAYS PER LEVEL TRACK
+        const globalCourseCatalogDatabase = {
+            "Level 100": [
+                { code: "INF-101", title: "Advanced Hardware Logic and Architecture Matrices", credits: 3, type: "Core Module" },
+                { code: "INF-103", title: "Discrete Structure Algorithms & Computational Complexities", credits: 3, type: "Core Module" },
+                { code: "SWE-108", title: "Object Oriented Scripting Environments & Paradigms", credits: 3, type: "Elective Option" },
+                { code: "MAT-112", title: "Vector Analysis Models & Linear Programming Parameters", credits: 4, type: "Required Module" }
+            ],
+            "Level 200": [
+                { code: "INF-201", title: "Structured Data Engineering Architecture Models", credits: 3, type: "Core Module" },
+                { code: "INF-202", title: "Systems Engineering Principles & Analysis Frameworks", credits: 3, type: "Core Module" },
+                { code: "INF-205", title: "Oracle Cloud Infrastructure Schema Engine Topologies", credits: 3, type: "Core Module" },
+                { code: "NET-210", title: "Enterprise Routing Architectures and Switching Models", credits: 3, type: "Elective Option" }
+            ],
+            "Level 300": [
+                { code: "INF-301", title: "Kernel Compilers & Distributed Operating Software Topologies", credits: 3, type: "Core Module" },
+                { code: "INF-304", title: "Advanced Cryptographic Protocols & Information Assurance", credits: 3, type: "Core Module" },
+                { code: "INF-309", title: "DevOps Orchestration Engine Architectures & Automation", credits: 3, type: "Required Module" },
+                { code: "SWE-315", title: "Microservice Framework Scaling & API Integrations", credits: 3, type: "Elective Option" }
+            ],
+            "Level 400": [
+                { code: "INF-401", title: "Deep Learning Matrices & Neural Computational Frameworks", credits: 3, type: "Core Module" },
+                { code: "INF-405", title: "Enterprise Digital Forensics & Attack Surface Interception", credits: 3, type: "Core Module" },
+                { code: "SWE-420", title: "High-Performance Cloud Database Design Architecture", credits: 3, type: "Elective Option" },
+                { code: "INF-499", title: "Dual-Semester Capstone Production Engineering Thesis", credits: 6, type: "Required Module" }
+            ]
         };
 
-        let secureExamTokensPool = JSON.parse(localStorage.getItem("dru_secure_exam_tokens")) || ["DRU-992140", "DRU-554109"];
-        let pendingRegistrationsDb = JSON.parse(localStorage.getItem("university_pending_db")) || {};
-        
-        let sessionUser = null;
-        let validatedExamCodeReference = ""; 
-        let activeSubjectTrack = ""; 
-        let quizIdx = 0, quizScore = 0, stateLocked = false;
-
-        // GENERATING HELPER TO BUILD EXACTLY 100 REALISTIC IT QUESTIONS PER SECTION
-        function generateSectionQuestions(subject, keyword, details) {
-            let questions = [];
-            for (let i = 1; i <= 100; i++) {
-                let correctAnswerIndex = (i % 4);
-                let optA = `Standard ${keyword} Implementation Optimization Variant Layer Alpha #${i}`;
-                let optB = `Decoupled Distributed ${details} Micro-Architecture Processing Protocol Node #${i}`;
-                let optC = `Iterative Cross-Platform High-Performance ${keyword} Pipeline Verification Array #${i}`;
-                let optD = `Centralized Fault-Tolerant Native ${details} Structural Framework Matrix #${i}`;
-                
-                let optionsArr = [optA, optB, optC, optD];
-                let selectedQuestionText = `[Question #${i}] Which functional core architectural model optimization constraint best handles ${keyword} parameters and mitigates ${details} latency bounds during high-throughput execution sequences inside a production layer?`;
-                
-                questions.push({
-                    q: selectedQuestionText,
-                    options: optionsArr,
-                    ans: correctAnswerIndex
-                });
-            }
-            return questions;
-        }
-
-        const examDatabases = {
-            ecommerce: generateSectionQuestions("E-Commerce", "B2B Payment Settlement Loops", "SSL Handshake Encryption Logic Matrices"),
-            software: generateSectionQuestions("Software Engineering", "Agile Epic Backlog Testing Iterations", "Structural Component Validation Lifecycles"),
-            java: generateSectionQuestions("Java OOP Development", "JVM Runtime Memory Heap Allocation Overrides", "Polymorphic Abstract Method Configurations"),
-            management: generateSectionQuestions("Principles of Management", "Taylorist Corporate Operational Optimization Fields", "Fayol Organizational Hierarchy Controls"),
-            networks: generateSectionQuestions("Computer Networks", "OSPF Area 0 Link-State Router Convergence Data Paths", "ARP Dynamic Table Mapping Parameters"),
-            hci: generateSectionQuestions("Human-Computer Interaction", "Jakob Nielsen Usability Heuristics Design Paradigms", "Cognitive Load Interface Processing Bounds"),
-            os: generateSectionQuestions("Operating Systems", "Kernel MMU Virtual Memory Paging Fault Modules", "CPU Process Starvation Schedulers")
+        // EXAM QUESTIONS REGISTER MAPPED BY STRIPPED LEVEL KEYS
+        const hierarchicalExamDatabase = {
+            "Level 100": [
+                { q: "Which electronic logic component executes a complete inverse evaluation state output from its direct base inputs?", a: ["AND Gate", "OR Gate", "NOT Gate", "XOR Gate"], c: 2 },
+                { q: "In standard binary conversion matrices, what integer representation is reflected by the sequence 1011?", a: ["9", "11", "13", "15"], c: 1 },
+                { q: "Which CPU component is strictly responsible for performing basic computational math, floating points, and numerical comparison operations?", a: ["Control Unit", "Arithmetic Logic Unit (ALU)", "L1 Data Cache Cluster", "Instruction Register"], c: 1 },
+                { q: "What primary software runtime environment sits directly between the physical hardware and application software layers?", a: ["Database Server", "Operating System", "Assembly Language Linker", "Web Browser Engine"], c: 1 },
+                { q: "Which algorithmic computational notation measures worst-case scaling behavior bounds?", a: ["Big O Notation", "Omega Framework", "Theta Parameter Matrix", "Little o Boundary"], c: 0 },
+                { q: "What data layout paradigm uses Last-In, First-Out (LIFO) tracking pipelines?", a: ["Queue Structure", "Linked Sequence", "Stack Vector Array", "Hash Matrix"], c: 2 },
+                { q: "In Object-Oriented programming foundations, what allows a single class method to display altered behavioral forms?", a: ["Encapsulation", "Polymorphism", "Data Hiding Matrix", "Sequential Inheritance"], c: 1 },
+                { q: "Which base standard variable primitive holds single uncombined characters inside compiler allocations?", a: ["String Pointer", "Float Allocation", "Char Token Array", "Boolean Node"], c: 2 },
+                { q: "What structural mechanism describes calling a targeted method execution segment cleanly from directly inside its own logic definition wrapper?", a: ["Iteration Loop", "Recursion Pathway", "Dynamic Overriding", "Asynchronous Instantiation"], c: 1 },
+                { q: "Which system engineering mapping process represents sequential logical operations without actual coded syntax?", a: ["Pseudocode Documentation", "Database Schema Models", "Class Interfaces", "State Vector Layouts"], c: 0 },
+                { q: "What core physical bus track allows the CPU to target specific memory cell coordinates directly during operations?", a: ["Data Transmission Pipeline", "Address Bus Grid", "Control Clock Line", "Serial Interface Bus"], c: 1 },
+                { q: "Which volatile chip standard provides primary short-term operation states inside working computers?", a: ["EEPROM Flash Cluster", "HDD Storage Blocks", "Random Access Memory (RAM)", "Optical Tracking Sectors"], c: 2 },
+                { q: "What structural logic operation evaluates to TRUE only when both parameters matched are valid?", a: ["Logical OR Sequence", "Logical AND Linkage", "Logical NAND Operation", "Logical Exclusive-OR"], c: 1 },
+                { q: "Which baseline system system framework translates literal text source files into runnable machine execution binaries?", a: ["Source Interpreter", "Code Compiler Engine", "Script Linker Node", "Asset Decompressor"], c: 1 },
+                { q: "What specific logic structure tests variable conditions repeatedly while an expression stays validated?", a: ["Switch Control Case", "If-Else Evaluation Branch", "While Loop Matrix", "Static Breakdown Return"], c: 2 }
+            ],
+            "Level 200": [
+                { q: "Which Layer of the OSI model handles packet routing, logical subnet mapping, and structural path determination?", a: ["Data Link Layer", "Network Layer", "Transport Layer", "Physical Layer"], c: 1 },
+                { q: "What unique constraint is violated during database normalization if an attribute relies on elements outside the primary key context (Transitive Dependency)?", a: ["First Normal Form (1NF)", "Second Normal Form (2NF)", "Third Normal Form (3NF)", "Boyce-Codd Normal Form (BCNF)"], c: 2 },
+                { q: "In an enterprise Oracle Database configuration environment, which background memory engine writes dirty blocks cleanly down onto data storage volumes?", a: ["LGWR", "CKPT", "DBWn", "PMON"], c: 2 },
+                { q: "An engineer isolates an infrastructure subnet space running a mask parameter of /26. What is the total quantity of assignable interface host addresses allowed?", a: ["254 Hosts", "62 Hosts", "30 Hosts", "14 Hosts"], c: 1 },
+                { q: "During Systems Analysis execution loops, which specific behavioral modeling diagram maps chronological interaction sequences between functional components?", a: ["Activity Diagram", "Use Case Schema", "Sequence Diagram", "Deployment Topology"], c: 2 },
+                { q: "Which core transport logic implementation protocol delivers low-overhead connectionless execution routing frameworks lacking state confirmation guarantees?", a: ["TCP", "UDP", "SCTP", "ICMP"], c: 1 },
+                { q: "What structural mechanism is utilized inside database indexing operations to drastically lower disk logical I/O block scan times?", a: ["B-Tree Balanced Hierarchies", "Linked Interlinked Lists", "Hash Table Buckets", "Linear Array Vectors"], c: 0 },
+                { q: "Which specialized dynamic application routing protocol functions as an interior link-state architectural controller using Area 0 core zones?", a: ["RIPv2", "EIGRP", "OSPF", "BGP4"], c: 2 },
+                { q: "What properties are absolutely required to guarantee database management reliability criteria rules?", a: ["Atomicity, Consistency, Isolation, Durability", "Availability, Concurrency, Integrity, Distribution", "Access, Control, Indexing, Definition", "Aggregation, Compression, Iteration, Deployment"], c: 0 },
+                { q: "Which structured standard code mechanism allows system designers to prevent remote programmatic command insertion (SQL Injection) threats inside text inputs?", a: ["Dynamic Concatenation Elements", "Prepared Statements / Parameterized Queries", "Base64 Representation Formats", "Regular Expression Interceptors"], c: 1 },
+                { q: "What specific parameter token sequence uniquely distinguishes an IPv6 interface address assignment header profile layer structurally from legacy IPv4 architectures?", a: ["32-bit Vector Headers", "64-bit Hexagonal Chains", "128-bit Address Blocks", "256-bit Unencrypted Strings"], c: 2 },
+                { q: "What methodology defines system analysis practices focused on iterative sprint cycles, modular adaptive refactoring tracks, and frequent user feedback?", a: ["Waterfall Lifecycle Sequence", "V-Model Implementation Path", "Agile SCRUM Framework Run", "Structured Systems Design (SSADM)"], c: 2 },
+                { q: "Which structured command language operator expression combines structural relational dataset intersections while automatically filtering out all duplicate rows?", a: ["UNION ALL", "UNION", "JOIN ON CROSS", "INTERSECT MERGE"], c: 1 },
+                { q: "What primary mechanism prevents loops in Ethernet networks when multiple redundant connections exist between switches?", a: ["Spanning Tree Protocol (STP)", "Split Horizon", "Border Gateway Protocol", "VLAN Trunking Protocol"], c: 0 },
+                { q: "In Object-Oriented software architectures, what core principle describes hiding an object's internal implementation data states behind exposed public validation methods?", a: ["Inheritance Overrides", "Polymorphism Matrices", "Encapsulation Isolation", "Abstraction Hierarchies"], c: 2 }
+            ],
+            "Level 300": [
+                { q: "In operating system kernel mechanics, what state is reached when multiple competing processes wait indefinitely for cross-allocated locks that none can drop?", a: ["Race Condition Fork", "Context Switch Delay", "Deadlock Event", "Inverted Thread Trap"], c: 2 },
+                { q: "Which symmetric encryption protocol uses a block matrix configuration tracking up to 256 bits for high-volume enterprise hardware masking?", a: ["RSA Algorithm", "MD5 Hash Structure", "Advanced Encryption Standard (AES)", "Diffie-Hellman Key Pipeline"], c: 2 },
+                { q: "In enterprise DevOps practices, what does a deployment runtime pipeline prioritize to securely ensure stable cloud configuration clusters?", a: ["Manual Server Auditing", "Continuous Integration / Continuous Deployment (CI/CD)", "Monolithic Code Merging", "Ephemeral Sandbox Branching"], c: 1 },
+                { q: "Which architectural network pattern decouples programmatic microservice control planes directly away from physical system hardware forwarding channels?", a: ["Software-Defined Networking (SDN)", "Mesh Network Topologies", "Point-to-Point Multi-Drop", "Encapsulated Network Layering"], c: 0 },
+                { q: "What structural strategy prevents resource collision problems when coordinating file mutations inside distributed engine environments?", a: ["Distributed Lock Managers (DLM)", "Linear Buffer Flushing", "Sequential Array Instantiation", "Local Cache Disabling"], c: 0 },
+                { q: "What core design model describes tracking application systems as stateless, isolated, lightweight execution instances packed with runtime dependencies?", a: ["Monolithic Hosting", "Virtual Machine Partitioning", "Containerization (e.g., Docker)", "Serverless Script Pipelines"], c: 2 },
+                { q: "Which network verification configuration protects internal company resource clusters by enforcing constant active token authentication checkpoints?", a: ["Perimeter Firewall Shield", "Zero Trust Security Architecture", "Demilitarized Zone Partition", "Basic Access Control Lists"], c: 1 },
+                { q: "In public cloud scaling structures, what structural component dynamically distributes computing request loads onto active server pools?", a: ["DNS Record Resolver", "Network Load Balancer", "Reverse Proxy Cache Engine", "API Gateway Controller"], c: 1 },
+                { q: "What asymmetric key logic framework structures modern web communication certificates (HTTPS) across internet endpoints?", a: ["Public Key Infrastructure (PKI)", "Pre-Shared Token Exchanges", "Symmetric Stream Interception", "Dynamic Core Cryptology"], c: 0 },
+                { q: "Which microservice architectural component intercepts client connection paths to distribute requests, transform headers, and manage token verification matrices?", a: ["Message Broker Nodes", "API Gateway Component", "Distributed Key Stores", "Service Registry Map"], c: 1 },
+                { q: "In database engineering execution routines, what does a Write-Ahead Logging (WAL) protocol explicitly guarantee?", a: ["Immediate Visual Execution Summary", "Durability and Atomicity in Failure Events", "Automated Query Optimization", "Real-Time Index Compression"], c: 1 },
+                { q: "Which programmatic mechanism processes asynchronous streaming queues inside scalable software ecosystems safely?", a: ["Message Brokers (e.g., RabbitMQ / Kafka)", "Synchronous HTTP Interceptors", "Thread Pool Blocking Loops", "Local Storage State Arrays"], c: 0 },
+                { q: "What specialized testing style evaluates a system's processing limits by creating extreme request volumes?", a: ["Unit Validation Run", "Regression Testing Step", "Stress / Load Testing", "Integration Boundary Matrix"], c: 2 },
+                { q: "Which technical design concept prevents a single microservice crash from bringing down an entire live application ecosystem?", a: ["Circuit Breaker Pattern", "Monolithic Clustering", "Shared Database Constraints", "Synchronous Dependency Chains"], c: 0 },
+                { q: "In distributed computing structures, what core trade-off limitation is defined by the CAP Theorem?", a: ["Cost, Agility, Performance", "Consistency, Availability, Partition Tolerance", "Concurrency, Access, Protection", "Compression, Allocation, Processing"], c: 1 }
+            ],
+            "Level 400": [
+                { q: "What backpropagation activation function resolves the vanishing gradient problem in deep learning networks?", a: ["Sigmoid Function", "Rectified Linear Unit (ReLU)", "Hyperbolic Tangent (tanh)", "Binary Step Function"], c: 1 },
+                { q: "During system vulnerability investigations, what active strategy creates decoy environments to trap and log unauthorized access attempts?", a: ["Intrusion Prevention Rule", "Honeypot Deployment Matrix", "Sandboxed Reverse Engineering", "Packet Inspection Intercept"], c: 1 },
+                { q: "Which cloud database optimization model separates write channels from read channels to enhance processing throughput?", a: ["CQRS Architectural Pattern", "Sharded Hash Partitioning", "Vertical Scaling Allocation", "ACID Replication Mapping"], c: 0 },
+                { q: "What advanced neural network layout uses multi-head attention components to process sequential text blocks in parallel?", a: ["Recurrent Neural Network (RNN)", "Convolutional Filter Array (CNN)", "Transformer Model Architecture", "Restricted Boltzmann Engine"], c: 2 },
+                { q: "Which methodology verifies target source code systems securely without executing the codebase binaries directly?", a: ["Dynamic Fuzzing Arrays", "Static Application Security Testing (SAST)", "Penetration Exploitation Run", "Sandboxed Behavioral Audits"], c: 1 },
+                { q: "In distributed data stores, what does a Paxos or Raft protocol manage?", a: ["Data Block Compression Rates", "Consensus Protocol State Coordination", "Network Cryptography Tunnels", "Automated UI Form Compilation"], c: 1 },
+                { q: "What digital forensic strategy captures data from volatile computer memory before turning off a machine?", a: ["Bit-stream Disk Cloning", "Live RAM Imaged Acquisition", "Master Boot Record Hashing", "Log File Extraction Arrays"], c: 1 },
+                { q: "In scalable system frameworks, what strategy divides large database tables into separate physical nodes based on specific data keys?", a: ["Horizontal Database Sharding", "Vertical Indexing Stacks", "In-Memory Schema Caching", "Relational Views Linking"], c: 0 },
+                { q: "What optimization approach updates local operational systems by tracking data changes through an append-only ledger instead of rewriting database rows?", a: ["Event Sourcing Pattern", "Batch Stream Processing", "Atomic Index Normalization", "Object-Relational Mirroring"], c: 0 },
+                { q: "Which machine learning problem occurs when a tracking algorithm fits training data points too closely, losing generalization accuracy on new inputs?", a: ["Underfitting Divergence", "Hyperparameter Bias Drift", "Overfitting Phenomenon", "Stochastic Disconnect"], c: 2 },
+                { q: "What cryptography approach secures analytical operations on sensitive records by allowing mathematical calculations directly on encrypted data?", a: ["Homomorphic Encryption Standard", "Quantum Key Distribution", "Transport Layer Security (TLS)", "Ephemeral Key Exchange"], c: 0 },
+                { q: "Which security model requires verifying identities and permissions for every system request, even for accounts inside the corporate network perimeter?", a: ["Role-Based Access Control", "Zero Trust Architecture Layer", "Demilitarized Zone Routing", "Single Sign-On Federation"], c: 1 },
+                { q: "What specific parameter optimizes deep neural learning rates by tracking historical weight mutations dynamically?", a: ["Stochastic Dropout Ratios", "Adam Optimizer Algorithm", "L1 Regularization Constants", "Sigmoid Boundary Anchors"], c: 1 },
+                { q: "Which automated code testing approach searches for zero-day vulnerabilities by sending malformed, randomized inputs into target input parsers?", a: ["Unit Logic Compilation", "Fuzz Testing (Fuzzing Matrix)", "Regression Step Checklist", "Functional Integration Run"], c: 1 },
+                { q: "What strategy maintains overall web availability by limiting the maximum number of requests a system handles within a specific timeframe?", a: ["Rate Limiting Throttle Engine", "Load Balancer Heartbeat", "Connection Pooling Protocol", "Microservice Gateway Mapping"], c: 0 }
+            ]
         };
 
-        const subjectMetadata = {
-            ecommerce: { title: "E-Commerce Exam", desc: "Tracks digital business paradigms, encrypted payment processing, and architectural models." },
-            software: { title: "Software Engineering", desc: "Evaluates SDLC lifecycles, Agile epic methods, components validation testing loops." },
-            java: { title: "Java Development", desc: "Tests class inheritances, OOP polymorphism models, stack/heap data allocations." },
-            management: { title: "Principles of Management", desc: "Tracks operational structures, task coordination metrics, leadership principles." },
-            networks: { title: "Computer Networks", desc: "Evaluates network metrics, OSPF area division updates, IP/MAC data mappings." },
-            hci: { title: "Human-Computer Interaction", desc: "Measures usability engineering bounds, UI prototyping loops, evaluation rules." },
-            os: { title: "Operating Systems", desc: "Tracks kernel structures, memory map paging modules, resource starvation states." }
-        };
+        // System Shared Application Runtime Controller
+        let currentAuthenticatedStudentProfile = {};
 
-        setInterval(() => {
-            const date = new Date();
-            document.getElementById('live-clock').innerText = date.toLocaleTimeString() + ' GMT';
-            const hrs = date.getHours();
-            let greet = hrs < 12 ? "Good Morning Operator," : hrs < 18 ? "Good Afternoon User," : "Good Evening Administrator,";
-            document.getElementById('live-greeting').innerText = greet;
-        }, 1000);
+        let studentAnswersRegistry = Array(15).fill(null);
+        let activeExamIndexTracker = 0;
+        let examTimeRemainingSeconds = 900;
+        let countdownTimerTickerInstance = null;
+        let generatedBypassToken = "";
 
-        window.addEventListener('DOMContentLoaded', () => {
-            const activeSessionToken = localStorage.getItem("dru_active_session_index");
-            if (activeSessionToken && localStudentsDb[activeSessionToken]) {
-                mountDashboardSession(localStudentsDb[activeSessionToken]);
-            }
-        });
-
-        function toggleMobileMenu() {
-            document.getElementById('main-sidebar').classList.toggle('menu-open');
-            document.getElementById('menu-overlay').classList.toggle('active');
+        function toggleSidebar() {
+            document.getElementById('app-sidebar').classList.toggle('open');
         }
 
-        function toggleGatewayView(target) {
-            ['login', 'signup', 'receipt', 'admin-gate', 'admin', 'super-auth-gate', 'super-gate', 'super'].forEach(p => {
-                document.getElementById(`panel-${p}`).classList.add('hidden');
-            });
-            document.getElementById(`panel-${target}`).classList.remove('hidden');
+        function toggleAuthWindows(showRegisterCard) {
+            document.getElementById('login-window-card').classList.toggle('hidden', showRegisterCard);
+            document.getElementById('register-window-card').classList.toggle('hidden', !showRegisterCard);
         }
 
-        function challengeSuperAdminGatePassword() {
-            const inputPass = document.getElementById('super-gate-unlock-pass').value;
-            if (inputPass === SUPER_GATEWAY_PASSWORD) {
-                document.getElementById('super-gate-unlock-pass').value = "";
-                toggleGatewayView('super-gate');
-                alert("🔓 Entry Password Verified. Initializing root authentication parameters.");
-            } else {
-                alert("❌ Verification Error: Invalid control key sequence.");
-                toggleGatewayView('login');
-            }
-        }
-
-        function verifyAdminGatewayAccess() {
-            const enteredPass = document.getElementById('gate-admin-password').value;
-            if (enteredPass === STAFF_GATEWAY_PASSWORD) {
-                document.getElementById('gate-admin-password').value = ""; 
-                toggleGatewayView('admin');
-                alert("🔓 Access Granted: Staff desk module connections active.");
-            } else {
-                alert("❌ Authentication Failed: Invalid Staff Desk Password parameter.");
-                toggleGatewayView('login');
-            }
-        }
-
-        function verifySuperGatewayAccess() {
-            const enteredId = document.getElementById('gate-super-id').value.trim();
-            const enteredPass = document.getElementById('gate-super-pass').value;
-            if (enteredId === "Dynicious King" && enteredPass === SUPER_GATEWAY_PASSWORD) {
-                document.getElementById('super-current-key').value = activeAdminKey;
-                toggleGatewayView('super');
-                alert("👑 Root Status Authenticated: Welcome, Dynicious King.");
-            } else {
-                alert("❌ Critical Access Denial: Root parameters invalid.");
-                toggleGatewayView('login');
-            }
-        }
-
-        function calculateMetricGrade(percentageScore) {
-            if (percentageScore >= 80) return { letter: "A", label: "Excellent", color: "#10b981", bg: "rgba(16,185,129,0.15)", gp: 4.0, fail: false };
-            if (percentageScore >= 75) return { letter: "B+", label: "Very Good", color: "#3b82f6", bg: "rgba(59,130,246,0.15)", gp: 3.5, fail: false };
-            if (percentageScore >= 70) return { letter: "B", label: "Good", color: "#2563eb", bg: "rgba(37,99,235,0.15)", gp: 3.0, fail: false };
-            if (percentageScore >= 65) return { letter: "C+", label: "Fairly Good", color: "#eab308", bg: "rgba(234,179,8,0.15)", gp: 2.5, fail: false };
-            if (percentageScore >= 60) return { letter: "C", label: "Satisfactory", color: "#ca8a04", bg: "rgba(202,138,4,0.15)", gp: 2.0, fail: false };
-            if (percentageScore >= 50) return { letter: "D", label: "Pass", color: "#94a3b8", bg: "rgba(148,163,184,0.15)", gp: 1.0, fail: false };
-            return { letter: "F", label: "Fail", color: "#ef4444", bg: "rgba(239,68,68,0.15)", gp: 0.0, fail: true };
-        }
-
-        function getAcademicStandingLabel(gpa) {
-            if (gpa >= 3.50) return "First Class Honours";
-            if (gpa >= 3.00) return "Second Class Upper";
-            if (gpa >= 2.50) return "Second Class Lower";
-            if (gpa >= 2.00) return "Third Class Pass";
-            return "Pass / Satisfactory standing";
-        }
-
-        function executeAuthentication() {
-            const index = document.getElementById('login-index').value.trim();
-            const pass = document.getElementById('login-pass').value;
-            if (localStudentsDb[index] && localStudentsDb[index].pass === pass) {
-                localStorage.setItem("dru_active_session_index", index);
-                mountDashboardSession(localStudentsDb[index]);
-            } else {
-                alert("❌ Connection Denied:\nInvalid credentials schema mapping.");
-            }
-        }
-
-        function executeRegistration() {
+        function handleRegistrationSubmit() {
             const name = document.getElementById('reg-name').value.trim();
-            const email = document.getElementById('reg-email').value.trim();
-            const phone = document.getElementById('reg-phone').value.trim();
-            if(!name || !email || !phone) { alert("⚠️ Validation Failure: All fields required."); return; }
-            const randomId = "TEMP-" + Math.floor(1000 + Math.random() * 9000);
-            pendingRegistrationsDb[randomId] = { name, email, phone, token: randomId };
-            localStorage.setItem("university_pending_db", JSON.stringify(pendingRegistrationsDb));
-            document.getElementById('rec-name').innerText = name;
-            document.getElementById('rec-token').innerText = randomId;
-            toggleGatewayView('receipt');
-        }
+            const program = document.getElementById('reg-program').value;
+            const level = document.getElementById('reg-level').value.trim(); // Dynamic Level Extraction
+            const pass = document.getElementById('reg-pass').value;
 
-        function executeAdminGeneration() {
-            const staffInputKey = document.getElementById('admin-pass').value;
-            const studentTokenInput = document.getElementById('admin-student-token').value.trim();
-            const generatedIndexNo = document.getElementById('admin-gen-index').value.trim();
-            const generatedPassword = document.getElementById('admin-gen-pass').value;
+            if(!name) { alert("⚠️ Application processing requires a valid username string assignment."); return; }
 
-            if (staffInputKey !== activeAdminKey) { alert("❌ Administrative Access Violation."); return; }
-            if (!pendingRegistrationsDb[studentTokenInput]) { alert("⚠️ Registry Code Fault."); return; }
-            if (!generatedIndexNo || !generatedPassword) { alert("⚠️ Configurations cannot be empty."); return; }
-            if (localStudentsDb[generatedIndexNo]) { alert("⚠️ Collision Exception."); return; }
-
-            const verifiedBaseDetails = pendingRegistrationsDb[studentTokenInput];
-            localStudentsDb[generatedIndexNo] = {
-                indexNo: generatedIndexNo, name: verifiedBaseDetails.name, email: verifiedBaseDetails.email,
-                pass: generatedPassword, paidExams: false, results: [], resitOwed: {}
+            const randomCodeSuffix = Math.floor(100 + Math.random() * 900);
+            currentAuthenticatedStudentProfile = {
+                fullName: name, 
+                indexNo: `STU-2026-${randomCodeSuffix}`, 
+                program: program, 
+                level: level, 
+                password: pass || "password123"
             };
-            delete pendingRegistrationsDb[studentTokenInput];
-            localStorage.setItem("university_mock_db", JSON.stringify(localStudentsDb));
-            localStorage.setItem("university_pending_db", JSON.stringify(pendingRegistrationsDb));
-            alert("🎉 Success: Student account generated safely.");
-            toggleGatewayView('login');
+
+            alert(`🎉 Registration Matrix Initialized! Account instance bound to unique sequence: ${currentAuthenticatedStudentProfile.indexNo}`);
+            launchPortalMainConsole();
         }
 
-        function generateRandomAdminKey() {
-            document.getElementById('super-current-key').value = "DRU_CORE_" + Math.floor(100000 + Math.random() * 900000);
+        function handleLoginSubmit() {
+            const enteredIndex = document.getElementById('input-login-index').value.trim();
+            const enteredPass = document.getElementById('input-login-pass').value;
+
+            // Default login profile fallback logic
+            if(enteredIndex === "STU-2026-101" && enteredPass === "password123") {
+                currentAuthenticatedStudentProfile = {
+                    fullName: "Dynicious King", indexNo: "STU-2026-101", program: "Information Technology", level: "Level 200", password: "password123"
+                };
+                launchPortalMainConsole();
+            } else if(currentAuthenticatedStudentProfile && enteredIndex === currentAuthenticatedStudentProfile.indexNo && enteredPass === currentAuthenticatedStudentProfile.password) {
+                launchPortalMainConsole();
+            } else {
+                alert("❌ Authentication Failure: Index parameter or security key mismatch.");
+            }
         }
 
-        function saveMutatedAdminKey() {
-            const newlyDefinedKey = document.getElementById('super-current-key').value.trim();
-            if (!newlyDefinedKey) return;
-            activeAdminKey = newlyDefinedKey;
-            localStorage.setItem("dru_admin_key", activeAdminKey);
-            alert("✅ Active Staff Admin key mutated mapping overwritten.");
+        function launchPortalMainConsole() {
+            document.getElementById('auth-layer').classList.add('hidden');
+            document.getElementById('app-layer').classList.remove('hidden');
+
+            // Explicitly sync profile indicators 
+            const userLevelStr = currentAuthenticatedStudentProfile.level;
+            
+            document.getElementById('display-user-name').innerText = currentAuthenticatedStudentProfile.fullName;
+            document.getElementById('profile-program').innerText = currentAuthenticatedStudentProfile.program;
+            document.getElementById('profile-level').innerText = userLevelStr;
+            document.getElementById('profile-index').innerText = currentAuthenticatedStudentProfile.indexNo;
+
+            document.getElementById('assessment-panel-title').innerText = `${userLevelStr} - Technical Evaluation Matrix`;
+
+            // Reset dashboard state triggers
+            document.getElementById('quiz-landing-frame').classList.remove('hidden');
+            document.getElementById('quiz-score-report-frame').classList.add('hidden');
+            document.getElementById('quiz-active-engine-frame').classList.add('hidden');
+
+            buildRegistrationMatrixRows();
+            initializeAcademicLedgerBaseTable();
+            switchView('home');
         }
 
-        function compileNewExamSecureToken() {
-            const compiledCode = "DRU-" + Math.floor(100000 + Math.random() * 900000);
-            secureExamTokensPool.push(compiledCode);
-            localStorage.setItem("dru_secure_exam_tokens", JSON.stringify(secureExamTokensPool));
-            document.getElementById('super-compiled-code-log').innerText = `Generated Code: ${compiledCode}`;
+        function handleLogout() {
+            clearInterval(countdownTimerTickerInstance);
+            document.getElementById('app-layer').classList.add('hidden');
+            document.getElementById('auth-layer').classList.remove('hidden');
         }
 
-        function mountDashboardSession(studentObj) {
-            sessionUser = studentObj;
-            if(!sessionUser.resitOwed) sessionUser.resitOwed = {};
-            document.getElementById('layer-gateway').classList.add('hidden');
-            document.getElementById('layer-dashboard').classList.remove('hidden');
-            document.getElementById('bar-user-name').innerText = studentObj.name;
-            document.getElementById('card-index-display').innerText = studentObj.indexNo;
-            synchronizeExamWalletUI();
-            rebuildHistoricalResultsList();
-            buildExamDirectoryGrid();
-            routeWorkspaceView('home');
-        }
-
-        function shutdownSession() {
-            localStorage.removeItem("dru_active_session_index");
-            sessionUser = null;
-            document.getElementById('layer-dashboard').classList.add('hidden');
-            document.getElementById('layer-gateway').classList.remove('hidden');
-        }
-
-        function routeWorkspaceView(viewId) {
-            ['home', 'courses', 'timetable', 'quiz'].forEach(v => {
+        function switchView(viewId) {
+            ['home', 'quiz', 'registration', 'grades'].forEach(v => {
                 document.getElementById(`view-${v}`).classList.add('hidden');
                 document.getElementById(`nav-${v}`).classList.remove('active');
             });
             document.getElementById(`view-${viewId}`).classList.remove('hidden');
             document.getElementById(`nav-${viewId}`).classList.add('active');
-            const sidebar = document.getElementById('main-sidebar');
-            if (sidebar.classList.contains('menu-open')) toggleMobileMenu();
+            document.getElementById('app-sidebar').classList.remove('open');
         }
 
-        function buildExamDirectoryGrid() {
-            const grid = document.getElementById('exam-directory-grid');
-            grid.innerHTML = "";
+        function buildRegistrationMatrixRows() {
+            const tbody = document.getElementById('registration-table-body');
+            tbody.innerHTML = "";
+            const activeLevelKey = currentAuthenticatedStudentProfile.level;
             
-            Object.keys(subjectMetadata).forEach(key => {
-                const meta = subjectMetadata[key];
-                const isLockedByResit = sessionUser.resitOwed && sessionUser.resitOwed[key] === true;
-                
-                let actionBtnHtml = `<button class="btn-cyber" style="padding: 8px; font-size:12px;" onclick="initializeActiveQuiz('${key}')">Launch Exam Node</button>`;
-                if (isLockedByResit) {
-                    actionBtnHtml = `
-                        <div style="color: #ef4444; font-size: 11px; font-weight: 700; margin-bottom: 5px;"><i class="fa-solid fa-triangle-exclamation"></i> RESIT LOCKED</div>
-                        <button class="btn-cyber admin-btn" style="padding: 8px; font-size:11px;" onclick="processResitFeePayment('${key}')">Pay 50 GHS Resit Fee</button>
-                    `;
-                }
-                
-                grid.innerHTML += `
-                    <div class="subject-exam-card">
-                        <h4>${meta.title}</h4>
-                        <p>${meta.desc}</p>
-                        <div style="margin-top:auto; pt-10">${actionBtnHtml}</div>
-                    </div>`;
+            // Safe catalog loading configuration
+            const contextCourseList = globalCourseCatalogDatabase[activeLevelKey] || [];
+
+            if(contextCourseList.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--danger-color);">No curriculum datasets structured for this tier level block.</td></tr>`;
+                return;
+            }
+
+            contextCourseList.forEach((course) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><input type="checkbox" style="width:16px; height:16px; accent-color:var(--success-color);" checked></td>
+                        <td style="font-family:'JetBrains Mono', monospace; font-weight:600; color:var(--primary-color);">${course.code}</td>
+                        <td><strong>${course.title}</strong></td>
+                        <td>${course.credits} Units Allocation</td>
+                        <td><span class="badge-status badge-success">${course.type}</span></td>
+                    </tr>`;
             });
         }
 
-        function synchronizeExamWalletUI() {
-            const walletBadge = document.getElementById('card-wallet-status');
-            const paymentGate = document.getElementById('quiz-block-payment-gate');
-            const codeGate = document.getElementById('quiz-block-code-gate');
-            const introGate = document.getElementById('quiz-block-intro');
+        function initializeAcademicLedgerBaseTable() {
+            const tbody = document.getElementById('transcript-table-body');
+            tbody.innerHTML = "";
+            const activeLevelKey = currentAuthenticatedStudentProfile.level;
+            const contextCourseList = globalCourseCatalogDatabase[activeLevelKey] || [];
 
-            paymentGate.classList.add('hidden');
-            codeGate.classList.add('hidden');
-            introGate.classList.add('hidden');
+            contextCourseList.forEach((course, idx) => {
+                let mockScore = 85 - (idx * 6);
+                let mockGrade = "B";
+                if(mockScore >= 80) mockGrade = "A";
+                if(mockScore < 70) mockGrade = "C";
 
-            if (sessionUser.paidExams) {
-                walletBadge.innerText = "GHS 300.00 Cleared"; walletBadge.style.color = "#10b981";
-                if (validatedExamCodeReference === "") codeGate.classList.remove('hidden');
-                else introGate.classList.remove('hidden');
-            } else {
-                walletBadge.innerText = "Unpaid Balance"; walletBadge.style.color = "#ef4444";
-                paymentGate.classList.remove('hidden');
-            }
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${course.code}</td>
+                        <td>${course.title}</td>
+                        <td>${course.credits} Units</td>
+                        <td>${mockScore}%</td>
+                        <td><span class="badge-status badge-success">${mockGrade}</span></td>
+                        <td>Pass (Verified)</td>
+                    </tr>`;
+            });
+
+            tbody.innerHTML += `
+                <tr id="live-exam-row">
+                    <td>EXM-999</td>
+                    <td>Unified Technical Assessment Portfolio (${activeLevelKey})</td>
+                    <td>3 Units</td>
+                    <td>--</td>
+                    <td><span class="badge-status badge-warn">NE</span></td>
+                    <td>No Record Found</td>
+                </tr>`;
         }
 
-        function processExamFeePayment() {
-            if (confirm("💳 Authorize billing deduction sequence of 300 Cedis (GHS 300)?")) {
-                sessionUser.paidExams = true;
-                localStudentsDb[sessionUser.indexNo].paidExams = true;
-                localStorage.setItem("university_mock_db", JSON.stringify(localStudentsDb));
-                synchronizeExamWalletUI();
-            }
-        }
-
-        function processResitFeePayment(subjectKey) {
-            if (confirm(`💳 Clear evaluation block metrics for ${subjectKey.toUpperCase()}? This authorization charges 50 Ghana Cedis (50 GHS).`)) {
-                sessionUser.resitOwed[subjectKey] = false;
-                localStudentsDb[sessionUser.indexNo].resitOwed[subjectKey] = false;
-                localStorage.setItem("university_mock_db", JSON.stringify(localStudentsDb));
-                alert("✅ Resit fee verified. Testing module unlocked successfully.");
-                buildExamDirectoryGrid();
-                rebuildHistoricalResultsList();
-            }
-        }
-
-        function validateExamAccessCode() {
-            const inputCode = document.getElementById('student-exam-access-code-input').value.trim().toUpperCase();
-            if (inputCode === sessionUser.indexNo.toUpperCase() || secureExamTokensPool.includes(inputCode)) {
-                if (secureExamTokensPool.includes(inputCode)) {
-                    secureExamTokensPool = secureExamTokensPool.filter(token => token !== inputCode);
-                    localStorage.setItem("dru_secure_exam_tokens", JSON.stringify(secureExamTokensPool));
-                }
-                validatedExamCodeReference = inputCode; 
-                synchronizeExamWalletUI();
-            } else { alert("❌ Access Token Key invalid, expired, or does not match your Student Index Number."); }
-        }
-
-        function initializeActiveQuiz(subjectKey) {
-            if (sessionUser.resitOwed && sessionUser.resitOwed[subjectKey] === true) {
-                alert("❌ Locked: You must settle the 50 GHS resit fee for this module first.");
-                return;
-            }
-            activeSubjectTrack = subjectKey;
-            document.getElementById('quiz-block-intro').classList.add('hidden');
-            document.getElementById('quiz-block-results').classList.add('hidden');
-            document.getElementById('quiz-block-player').classList.remove('hidden');
-            quizIdx = 0; quizScore = 0; stateLocked = false;
-            renderQuizStep();
-        }
-
-        function renderQuizStep() {
-            stateLocked = false;
-            document.getElementById('quiz-feedback-box').classList.add('hidden');
-            document.getElementById('quiz-action-btn').innerText = "Evaluate Choice Response";
+        /* LIVE EXAMINATION SYSTEM PIPELINE */
+        function initializeExamSession() {
+            studentAnswersRegistry = Array(15).fill(null);
+            activeExamIndexTracker = 0;
+            examTimeRemainingSeconds = 900;
             
-            const targetDb = examDatabases[activeSubjectTrack];
-            const currentItem = targetDb[quizIdx];
-            const progressionPercentage = (quizIdx / targetDb.length) * 100;
+            document.getElementById('quiz-landing-frame').classList.add('hidden');
+            document.getElementById('quiz-score-report-frame').classList.add('hidden');
+            document.getElementById('quiz-active-engine-frame').classList.remove('hidden');
             
-            document.getElementById('quiz-bar').style.width = `${progressionPercentage}%`;
-            document.getElementById('quiz-tracker-txt').innerText = `Question ${quizIdx + 1} of ${targetDb.length}`;
-            document.getElementById('quiz-domain-indicator').innerText = activeSubjectTrack.toUpperCase();
+            renderCurrentExamQuestionIndexCard();
+            startExamClockCountdownEngine();
+        }
 
-            let appendHtml = `<div style="font-size:14px; font-weight:600; margin-bottom:20px; line-height:1.5; color:#fff;">${quizIdx + 1}. ${currentItem.q}</div>`;
-            currentItem.options.forEach((opt, idx) => {
-                appendHtml += `
-                    <label>
-                        <input type="radio" name="cyber-quiz-radio" value="${idx}" class="radio-cyber" style="display:none;">
-                        <div class="option-cyber-box"><span>${String.fromCharCode(65 + idx)}.</span> ${opt}</div>
+        function startExamClockCountdownEngine() {
+            clearInterval(countdownTimerTickerInstance);
+            countdownTimerTickerInstance = setInterval(() => {
+                examTimeRemainingSeconds--;
+                let m = Math.floor(examTimeRemainingSeconds / 60);
+                let s = examTimeRemainingSeconds % 60;
+                document.getElementById('quiz-clock-ticker').innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+                if(examTimeRemainingSeconds <= 0) { compileFinalExamEvaluationMetrics(); }
+            }, 1000);
+        }
+
+        function renderCurrentExamQuestionIndexCard() {
+            document.getElementById('current-question-idx-lbl').innerText = activeExamIndexTracker + 1;
+            
+            // Dynamically bind query engine pointer matching user context exactly
+            const userCurrentLevel = currentAuthenticatedStudentProfile.level;
+            const targetedLevelExamSet = hierarchicalExamDatabase[userCurrentLevel] || hierarchicalExamDatabase["Level 100"];
+            
+            const contextData = targetedLevelExamSet[activeExamIndexTracker];
+            document.getElementById('target-question-string-render').innerText = contextData.q;
+            
+            const stack = document.getElementById('target-options-render-stack');
+            stack.innerHTML = "";
+            
+            contextData.a.forEach((opt, index) => {
+                const checked = studentAnswersRegistry[activeExamIndexTracker] === index ? "checked" : "";
+                const selClass = studentAnswersRegistry[activeExamIndexTracker] === index ? "selected" : "";
+                stack.innerHTML += `
+                    <label class="option-label-wrapper ${selClass}" id="label-wrapper-${index}">
+                        <input type="radio" name="exam-group-option" value="${index}" ${checked} onchange="registerStudentChoiceSelection(${index})">
+                        <span>${opt}</span>
                     </label>`;
             });
-            document.getElementById('quiz-dynamic-field').innerHTML = appendHtml;
+            
+            document.getElementById('quiz-prev-btn').style.visibility = activeExamIndexTracker === 0 ? "hidden" : "visible";
+            document.getElementById('quiz-next-btn').innerText = activeExamIndexTracker === 14 ? "Commit Evaluation Form" : "Advance Metric Question";
         }
 
-        function submitAnswerEvaluation() {
-            const targetDb = examDatabases[activeSubjectTrack];
-            if(stateLocked) {
-                quizIdx++;
-                if(quizIdx < targetDb.length) { renderQuizStep(); } 
-                else {
-                    document.getElementById('quiz-bar').style.width = `100%`;
-                    document.getElementById('quiz-block-player').classList.add('hidden');
-                    document.getElementById('quiz-block-results').classList.remove('hidden');
-                    document.getElementById('quiz-score-display').innerText = `${quizScore} / ${targetDb.length}`;
-                    
-                    document.getElementById('quiz-performance-profile').innerText = `Module evaluation sequence compiled for ${activeSubjectTrack.toUpperCase()}.`;
-                    
-                    const randMid = Math.floor(Math.random() * (95 - 65 + 1)) + 65;
-                    const randEnd = Math.floor(Math.random() * (95 - 60 + 1)) + 60;
-                    const quizPercentage = Math.round((quizScore / targetDb.length) * 100);
-                    const ultimateAggregateScore = (quizPercentage * 0.1) + (randMid * 0.3) + (randEnd * 0.6);
-                    const gradeMetrics = calculateMetricGrade(ultimateAggregateScore);
-                    
-                    const resitContainerBox = document.getElementById('quiz-resit-payment-box');
-                    resitContainerBox.innerHTML = "";
-                    resitContainerBox.classList.add('hidden');
-                    
-                    if(gradeMetrics.fail) {
-                        sessionUser.resitOwed[activeSubjectTrack] = true;
-                        localStudentsDb[sessionUser.indexNo].resitOwed[activeSubjectTrack] = true;
-                        
-                        resitContainerBox.className = "resit-lock-banner";
-                        resitContainerBox.innerHTML = `
-                            <h4 style="margin:0 0 8px 0; color:#ef4444; font-family:'Orbitron'; font-size:13px;"><i class="fa-solid fa-triangle-exclamation"></i> Assessment Standing: FAIL</h4>
-                            <p style="margin:0 0 15px 0; font-size:12.5px; color:#cbd5e1; line-height:1.5;">
-                                This score falls below academic certification thresholds. Access to this testing module is locked until a resit penalty fee of <strong>50 GHS</strong> is cleared.
-                            </p>
-                            <button class="btn-cyber admin-btn" style="width:auto; padding:8px 20px;" onclick="processResitFeePayment('${activeSubjectTrack}')">Settle 50 GHS Resit Fee Now</button>
-                        `;
-                        resitContainerBox.classList.remove('hidden');
-                    }
-                    
-                    const examResultRecord = { 
-                        date: new Date().toLocaleString(), subject: activeSubjectTrack.toUpperCase(),
-                        score: quizScore, total: targetDb.length, authCode: validatedExamCodeReference,
-                        quizRaw: quizPercentage, midRaw: randMid, endRaw: randEnd
-                    };
-                    
-                    sessionUser.results.push(examResultRecord);
-                    localStudentsDb[sessionUser.indexNo].results = sessionUser.results;
-                    localStorage.setItem("university_mock_db", JSON.stringify(localStudentsDb));
-                    
-                    validatedExamCodeReference = ""; 
-                    document.getElementById('student-exam-access-code-input').value = "";
-                    rebuildHistoricalResultsList();
-                    buildExamDirectoryGrid();
-                }
-                return;
+        function registerStudentChoiceSelection(idx) {
+            studentAnswersRegistry[activeExamIndexTracker] = idx;
+            for(let i=0; i<4; i++) { 
+                const e = document.getElementById(`label-wrapper-${i}`); 
+                if(e) e.classList.remove('selected'); 
             }
-
-            const targetRadio = document.querySelector('input[name="cyber-quiz-radio"]:checked');
-            if(!targetRadio) { alert("⚠️ Module Alert: Selection missing."); return; }
-
-            stateLocked = true;
-            const chosenIndex = parseInt(targetRadio.value);
-            const verifiedCorrectIndex = targetDb[quizIdx].ans;
-            const notificationEl = document.getElementById('quiz-feedback-box');
-
-            notificationEl.classList.remove('hidden');
-            if(chosenIndex === verifiedCorrectIndex) {
-                quizScore++;
-                notificationEl.className = "quiz-feedback-box correct";
-                notificationEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Response Verified. Connection parameters clear.`;
-            } else {
-                notificationEl.className = "quiz-feedback-box wrong";
-                notificationEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Threat Alert. Solution index was option: ${String.fromCharCode(65 + verifiedCorrectIndex)}`;
-            }
-            document.getElementById('quiz-action-btn').innerText = (quizIdx === targetDb.length - 1) ? "Compile Evaluation Sheet" : "Advance System Step";
+            document.getElementById(`label-wrapper-${idx}`).classList.add('selected');
         }
 
-        function rebuildHistoricalResultsList() {
-            const container = document.getElementById('results-stack-container');
-            const emptyNotice = document.getElementById('results-empty-notice');
-            
-            const gpaCard = document.getElementById('card-gpa-display');
-            const completedCard = document.getElementById('card-completed-display');
-            const standingCard = document.getElementById('card-standing-display');
+        function navigateExamIndex(dir) {
+            if(dir === 1 && activeExamIndexTracker === 14) { compileFinalExamEvaluationMetrics(); return; }
+            activeExamIndexTracker += dir;
+            renderCurrentExamQuestionIndexCard();
+        }
 
-            // Checker Dashboard Dom Targets
-            const chkTotal = document.getElementById('chk-total');
-            const chkPassed = document.getElementById('chk-passed');
-            const chkFailed = document.getElementById('chk-failed');
-            const chkAvg = document.getElementById('chk-avg');
+        function compileFinalExamEvaluationMetrics() {
+            clearInterval(countdownTimerTickerInstance);
+            let rawMarks = 0;
             
-            container.innerHTML = "";
-            
-            if (!sessionUser.results || sessionUser.results.length === 0) {
-                emptyNotice.classList.remove('hidden');
-                gpaCard.innerText = "0.00";
-                completedCard.innerText = "0 / 7";
-                standingCard.innerText = "No Data Compiled";
+            const userCurrentLevel = currentAuthenticatedStudentProfile.level;
+            const targetedLevelExamSet = hierarchicalExamDatabase[userCurrentLevel] || hierarchicalExamDatabase["Level 100"];
 
-                chkTotal.innerText = "0";
-                chkPassed.innerText = "0";
-                chkFailed.innerText = "0";
-                chkAvg.innerText = "0.0%";
-                return;
-            }
-            
-            emptyNotice.classList.add('hidden');
-            
-            let accumulatedGradePoints = 0;
-            let sumTotalWeightedPercentage = 0;
-            let passedCount = 0;
-            let failedCount = 0;
-            const totalModulesCount = Object.keys(examDatabases).length;
-            
-            sessionUser.results.forEach((rec, iteration) => {
-                const ultimateAggregateScore = (rec.quizRaw * 0.1) + (rec.midRaw * 0.3) + (rec.endRaw * 0.6);
-                const finalGradeObj = calculateMetricGrade(ultimateAggregateScore);
-                accumulatedGradePoints += finalGradeObj.gp;
-                sumTotalWeightedPercentage += ultimateAggregateScore;
-
-                if (finalGradeObj.fail) {
-                    failedCount++;
-                } else {
-                    passedCount++;
-                }
-                
-                container.innerHTML += `
-                    <div class="result-log-item">
-                        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--glass-border); padding-bottom:10px; margin-bottom:10px;">
-                            <div><strong>${rec.subject} Evaluation Module (Block #${iteration + 1})</strong><br><small style="color:#64748b;">Timestamp: ${rec.date}</small></div>
-                            <div><span style="background:${finalGradeObj.bg}; color:${finalGradeObj.color}; border: 1px solid ${finalGradeObj.color}40; padding:4px 10px; border-radius:6px; font-family:'Orbitron'; font-weight:700;">GRADE: ${finalGradeObj.letter} (${finalGradeObj.gp.toFixed(2)} GP)</span></div>
-                        </div>
-                        <div class="display-board-grid">
-                            <div class="display-board-col">
-                                <h5>Component Performance Breakdown</h5>
-                                <div class="display-board-row"><span>Online Quiz Score:</span><span>${rec.score} / ${rec.total} (${rec.quizRaw}%)</span></div>
-                                <div class="display-board-row"><span>Midterm Assessment:</span><span>${rec.midRaw}%</span></div>
-                                <div class="display-board-row"><span>End Semester Exam:</span><span>${rec.endRaw}%</span></div>
-                            </div>
-                            <div class="display-board-col">
-                                <h5>Weighted Performance Matrix</h5>
-                                <div class="display-board-row"><span>Aggregate Final Weight:</span><span>${ultimateAggregateScore.toFixed(2)}%</span></div>
-                                <div class="display-board-row"><span>Target Operational Status:</span><span style="color:${finalGradeObj.color}">${finalGradeObj.label}</span></div>
-                            </div>
-                        </div>
-                    </div>`;
+            targetedLevelExamSet.forEach((q, i) => { 
+                if(studentAnswersRegistry[i] === q.c) rawMarks++; 
             });
             
-            const activeCumulativeGpa = accumulatedGradePoints / sessionUser.results.length;
-            const absoluteMeanPercentage = sumTotalWeightedPercentage / sessionUser.results.length;
+            const finalPercentage = ((rawMarks / 15) * 100).toFixed(1);
+            let finalGrade = "E";
+            let passed = false;
 
-            gpaCard.innerText = activeCumulativeGpa.toFixed(2);
-            completedCard.innerText = `${sessionUser.results.length} / ${totalModulesCount}`;
-            standingCard.innerText = getAcademicStandingLabel(activeCumulativeGpa);
+            if(finalPercentage >= 85) { finalGrade = "A"; passed = true; }
+            else if(finalPercentage >= 70) { finalGrade = "B"; passed = true; }
+            else if(finalPercentage >= 55) { finalGrade = "C"; passed = true; }
+            else if(finalPercentage >= 50) { finalGrade = "D"; passed = true; }
 
-            // Dynamically update the embedded Checker Results Dashboard elements
-            chkTotal.innerText = sessionUser.results.length;
-            chkPassed.innerText = passedCount;
-            chkFailed.innerText = failedCount;
-            chkAvg.innerText = absoluteMeanPercentage.toFixed(1) + "%";
+            document.getElementById('quiz-active-engine-frame').classList.add('hidden');
+            document.getElementById('quiz-score-report-frame').classList.remove('hidden');
+            
+            document.getElementById('score-radial').innerText = `${rawMarks} / 15`;
+            document.getElementById('score-details-text').innerHTML = `<strong>Performance Calculation:</strong> ${finalPercentage}% Metric Yield &nbsp;|&nbsp; <strong>Alpha Scale Grade:</strong> Group [${finalGrade}]`;
+
+            const liveRow = document.getElementById('live-exam-row');
+            const standingCard = document.getElementById('standing-card-wrapper');
+
+            if(passed) {
+                document.getElementById('score-status-title').innerText = "🎉 ASSESSMENT VERIFIED PASS";
+                document.getElementById('score-status-title').style.color = "var(--success-color)";
+                document.getElementById('resit-gate-box').classList.add('hidden');
+                document.getElementById('normal-reset-btn').classList.remove('hidden');
+                
+                document.getElementById('profile-standing').innerText = `Passed Grade (${finalGrade})`;
+                document.getElementById('profile-standing').style.color = "var(--success-color)";
+                standingCard.classList.remove('failed');
+                
+                liveRow.innerHTML = `<td>EXM-999</td><td>Unified Technical Assessment Portfolio (${userCurrentLevel})</td><td>3 Units</td><td>${finalPercentage}%</td><td><span class="badge-status badge-success">${finalGrade}</span></td><td>Pass (Verified)</td>`;
+            } else {
+                document.getElementById('score-status-title').innerText = "❌ SUFFICIENCY EXCEPTION REJECTION";
+                document.getElementById('score-status-title').style.color = "var(--danger-color)";
+                document.getElementById('normal-reset-btn').classList.add('hidden');
+                document.getElementById('resit-gate-box').classList.remove('hidden');
+                
+                document.getElementById('profile-standing').innerText = "Resit Entry Pending";
+                document.getElementById('profile-standing').style.color = "var(--danger-color)";
+                standingCard.classList.add('failed');
+
+                generatedBypassToken = "RESIT-" + Math.random().toString(36).substring(2, 7).toUpperCase() + "-" + Math.floor(100 + Math.random() * 900);
+                document.getElementById('generated-resit-code').innerText = generatedBypassToken;
+
+                liveRow.innerHTML = `<td>EXM-999</td><td>Unified Technical Assessment Portfolio (${userCurrentLevel})</td><td>3 Units</td><td>${finalPercentage}%</td><td><span class="badge-status badge-danger">${finalGrade}</span></td><td>Failed (Resit Mandated)</td>`;
+            }
         }
 
-        function resetQuizTrack() {
-            document.getElementById('quiz-block-results').classList.add('hidden');
-            document.getElementById('quiz-block-player').classList.add('hidden');
-            document.getElementById('quiz-resit-payment-box').classList.add('hidden');
-            synchronizeExamWalletUI();
+        function verifyResitClearanceCode() {
+            const enteredToken = document.getElementById('input-clearance-key').value.trim();
+            if(enteredToken === generatedBypassToken && generatedBypassToken !== "") {
+                alert("✅ Cryptographic Token Validated! Clearing engine registers and initializing new terminal session framework...");
+                document.getElementById('input-clearance-key').value = "";
+                initializeExamSession();
+            } else {
+                alert("❌ Validation Exception: The clearance hash string inputted does not map to your active session node.");
+            }
+        }
+
+        function resetExamLanding() {
+            document.getElementById('quiz-score-report-frame').classList.add('hidden');
+            document.getElementById('quiz-landing-frame').classList.remove('hidden');
         }
     </script>
 </body>
